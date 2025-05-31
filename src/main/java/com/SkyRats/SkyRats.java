@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 public class SkyRats
 {
     public static final String MODID = "skyrats";
-    public static final String VERSION = "0.01";
+    public static final String VERSION = "0.02";
     private KeyBinding chatKey, commandKey;
 
     @EventHandler
