@@ -1,5 +1,6 @@
 package com.SkyRats.Commands;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 
 public class BaseCommand extends GuiChat {
@@ -15,7 +16,7 @@ public class BaseCommand extends GuiChat {
 
     @Override
     public void sendChatMessage(String message) {
-        //Intercept message from being sent.
+        //Intercept message from being sent and execute command if valid.
         if(message.startsWith("/")) {
             String commandKey = message.substring(1).split(" ")[0];
             CommandExecution command = CommandList.getCommand(commandKey);
