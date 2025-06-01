@@ -1,8 +1,12 @@
 package com.SkyRats.GUI;
 
+import com.SkyRats.Core.Features.FeatureSettings;
+import com.SkyRats.Core.Features.SettingButtons;
+import com.SkyRats.Core.Features.SettingsManager;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
+import java.util.List;
 
 public class HomeGUI extends GuiScreen {
 
@@ -10,7 +14,12 @@ public class HomeGUI extends GuiScreen {
     private final String[] features = {"Home", "Alerts", "Mining", "Rift", "Others"};
     private final int panelWidth = 500;
     private final int panelHeight = 320;
-    private final int leftPanelWidth = 200;
+    private final int leftPanelWidth = 150;
+    private final int totalWidth = leftPanelWidth + 350;
+
+    public HomeGUI() {
+        FeatureSettings.run();
+    }
 
     @Override
     public void initGui() {
@@ -22,7 +31,7 @@ public class HomeGUI extends GuiScreen {
         drawDefaultBackground();
 
         //Panel sizes
-        int panelX = (width - panelWidth) / 2;
+        int panelX = (width - totalWidth) / 2;
         int panelY = (height - panelHeight) / 2;
 
         // Draw left panel background
@@ -58,7 +67,7 @@ public class HomeGUI extends GuiScreen {
         }
 
         // Draw right panel content based on selected feature
-        drawRightPanelContent(panelX + leftPanelWidth + 10, panelY + 20);
+        drawRightPanelContent(panelX + leftPanelWidth + 10, panelY + 20, mouseX, mouseY);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -66,15 +75,25 @@ public class HomeGUI extends GuiScreen {
     //Detects if user clicks on options on the left panel
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if (mouseButton == 0) {  // left click
+        if (mouseButton == 0) {
+            // Check for toggle interaction
+            String featureKey = features[selectedFeature];
+            List<SettingButtons> toggles = SettingsManager.getFeatureToggles(featureKey);
+            if (toggles != null) {
+                for (SettingButtons toggle : toggles) {
+                    if (toggle.isHovered(mouseX, mouseY)) {
+                        toggle.toggle();
+                        return;
+                    }
+                }
+            }
+
+            // Check for feature sidebar selection
             int panelX = (width - panelWidth) / 2;
             int panelY = (height - panelHeight) / 2;
             int startY = panelY + 40;
-
             for (int i = 0; i < features.length; i++) {
                 int yPos = startY + i * 22;
-
-                // Check if click is inside this feature text area
                 if (mouseX >= panelX + 10 && mouseX <= panelX + leftPanelWidth - 10
                         && mouseY >= yPos && mouseY <= yPos + 12) {
                     selectedFeature = i;
@@ -87,27 +106,29 @@ public class HomeGUI extends GuiScreen {
     }
 
     //Right panel of GUI where all settings for selected feature is displayed.
-    private void drawRightPanelContent(int x, int y) {
+    private void drawRightPanelContent(int x, int y, int mouseX, int mouseY) {
         String title = "Settings";
         drawString(fontRendererObj, title, x, y, 0xFFFFFFFF);
+        List<SettingButtons> toggles = SettingsManager.getFeatureToggles(features[selectedFeature]);
 
-        switch (selectedFeature) {
-            case 0: // Home
-                drawString(fontRendererObj, "Home WIP", x, y + 20, 0xAAAAAA);
-                break;
-            case 1: // Alerts
-                drawString(fontRendererObj, "Alerts WIP", x, y + 20, 0xAAAAAA);
-                break;
-            case 2: // Mining
-                drawString(fontRendererObj, "Mining WIP", x, y + 20, 0xAAAAAA);
-                break;
-            case 3: // Rift
-                drawString(fontRendererObj, "Rift WIP", x, y + 20, 0xAAAAAA);
-                break;
-            case 4: // Others
-                drawString(fontRendererObj, "Others WIP", x, y + 20, 0xAAAAAA);
-                break;
+        if (toggles != null && !toggles.isEmpty()) {
+            int offsetY = y + 20;
+            for (SettingButtons toggle : toggles) {
+                toggle.setX(x);
+                toggle.setY(offsetY);
+                toggle.draw(mc, mouseX, mouseY);
+                offsetY += toggle.getHeight() + 5;
+            }
+        } else {
+            drawString(fontRendererObj, "WIP", x, y + 20, 0xAAAAAA);
         }
+    }
+
+    //Save settings on gui close
+    @Override
+    public void onGuiClosed() {
+        SettingsManager.save();
+        super.onGuiClosed();
     }
 }
 

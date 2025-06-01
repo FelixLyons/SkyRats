@@ -1,6 +1,7 @@
-package com.SkyRats.Core.Features;
+package com.SkyRats.Features.Alerts;
 
-import com.SkyRats.Features.Alerts.MiningAbilityAlert;
+import com.SkyRats.Core.Features.AlertMessagePopup;
+import com.SkyRats.Core.Features.SettingsManager;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -15,7 +16,9 @@ public class ChatManager {
         String msg = event.message.getUnformattedText();
 
         // Check for different alert types
-        MiningAbilityAlert.check(msg, alertMessagePopup);
+        if(SettingsManager.isFeatureEnabled("Alerts", "Mining Ability Cooldown Notification")) {
+            MiningAbilityAlert.check(msg, alertMessagePopup);
+        }
     }
 
 }

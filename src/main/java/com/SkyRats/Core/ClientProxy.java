@@ -3,7 +3,8 @@ package com.SkyRats.Core;
 import com.SkyRats.Core.Commands.CommandKeyInput;
 import com.SkyRats.Core.Commands.CommandRegisterAll;
 import com.SkyRats.Core.Features.AlertMessagePopup;
-import com.SkyRats.Core.Features.ChatManager;
+import com.SkyRats.Core.Features.SettingsManager;
+import com.SkyRats.Features.Alerts.ChatManager;
 import com.SkyRats.Core.Features.MineshaftTracker;
 import com.SkyRats.Core.Features.PlayerLocationChecker;
 import com.SkyRats.Core.GUI.GuiOpener;
@@ -18,6 +19,8 @@ public class ClientProxy  {
     );
 
     public void init() {
+        //Load Settings file
+        SettingsManager.load();
         //Register commands
         commands.execute();
         //User chat binds setup

@@ -2,6 +2,7 @@ package com.SkyRats.Features.Mining;
 
 import com.SkyRats.Core.Features.MineshaftTracker;
 import com.SkyRats.Core.Features.PlayerLocationChecker;
+import com.SkyRats.Core.Features.SettingsManager;
 import com.SkyRats.Core.Features.ShaftTypes;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -116,8 +117,12 @@ public class ShaftDetector {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        //Stops if player or world is null.
-        if(Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) return;
+        //CHeck if player or world is not loaded.
+        if(Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
+        //Checks if Mineshaft Tracker feature is turned on.
+        if(!SettingsManager.isFeatureEnabled("Mining", "Mineshaft Tracker")) {
+            System.out.println("Mineshaft Tracker is off");
+        }
         //Get player's skyblock location
         String location = PlayerLocationChecker.getLocation();
         //Is player in mineshaft currently
