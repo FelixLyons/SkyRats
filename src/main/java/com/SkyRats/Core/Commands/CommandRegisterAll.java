@@ -1,4 +1,6 @@
-package com.SkyRats.Commands;
+package com.SkyRats.Core.Commands;
+
+import com.SkyRats.Commands.MenuCommand;
 
 //Registers all custom commands.
 public class CommandRegisterAll {

@@ -1,9 +1,10 @@
 package com.SkyRats;
 
-import com.SkyRats.Commands.BaseCommand;
-import com.SkyRats.Commands.CommandRegisterAll;
-import com.SkyRats.GUI.GuiOpener;
-import com.SkyRats.GUI.HomeGUI;
+import com.SkyRats.Core.Commands.BaseCommand;
+import com.SkyRats.Core.Commands.CommandRegisterAll;
+import com.SkyRats.Core.Features.ChatManager;
+import com.SkyRats.Core.GUI.GuiOpener;
+import com.SkyRats.Core.Features.AlertMessagePopup;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
@@ -17,18 +18,24 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 public class SkyRats
 {
     public static final String MODID = "skyrats";
-    public static final String VERSION = "0.02";
+    public static final String VERSION = "0.05";
     private KeyBinding chatKey, commandKey;
+    private AlertMessagePopup alertPopup = new AlertMessagePopup();
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         //Register commands
         CommandRegisterAll.execute();
+
         //Gets user keybind for chat
         chatKey = Minecraft.getMinecraft().gameSettings.keyBindChat;
         commandKey = Minecraft.getMinecraft().gameSettings.keyBindCommand;
+
+        //Register all events
         MinecraftForge.EVENT_BUS.register(new GuiOpener());
+        MinecraftForge.EVENT_BUS.register(new ChatManager(alertPopup));
+        MinecraftForge.EVENT_BUS.register(alertPopup);
 		MinecraftForge.EVENT_BUS.register(this);
     }
 

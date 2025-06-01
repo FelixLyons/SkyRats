@@ -1,4 +1,4 @@
-package com.SkyRats.GUI;
+package com.SkyRats.Core.GUI;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

@@ -1,6 +1,5 @@
-package com.SkyRats.Commands;
+package com.SkyRats.Core.Commands;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 
 public class BaseCommand extends GuiChat {

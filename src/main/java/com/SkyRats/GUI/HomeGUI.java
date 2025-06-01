@@ -1,6 +1,5 @@
 package com.SkyRats.GUI;
 
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
@@ -22,6 +21,7 @@ public class HomeGUI extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
 
+        //Panel sizes
         int panelX = (width - panelWidth) / 2;
         int panelY = (height - panelHeight) / 2;
 
@@ -30,10 +30,11 @@ public class HomeGUI extends GuiScreen {
         // Draw right panel background
         drawRect(panelX + leftPanelWidth, panelY, panelX + panelWidth, panelY + panelHeight, 0xAA333333);
 
+        //Title and creator
         int startY = panelY;
         int yPos = startY + 10;
         drawString(fontRendererObj, "§lSkyRats", panelX + 10, yPos, 0xCCCCCC);
-        drawString(fontRendererObj, "By Sunaio & a_Blender_", panelX + 10, yPos + 11, 0xCCCCCC);
+        drawString(fontRendererObj, "By Sunaio & A_Blender_", panelX + 10, yPos + 11, 0xCCCCCC);
 
         // Draw feature texts on left panel
         startY = panelY + 40;
@@ -62,6 +63,7 @@ public class HomeGUI extends GuiScreen {
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
+    //Detects if user clicks on options on the left panel
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (mouseButton == 0) {  // left click
@@ -84,16 +86,17 @@ public class HomeGUI extends GuiScreen {
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
+    //Right panel of GUI where all settings for selected feature is displayed.
     private void drawRightPanelContent(int x, int y) {
         String title = "Settings";
         drawString(fontRendererObj, title, x, y, 0xFFFFFFFF);
 
         switch (selectedFeature) {
             case 0: // Home
-                drawString(fontRendererObj, " Home WIP", x, y + 20, 0xAAAAAA);
+                drawString(fontRendererObj, "Home WIP", x, y + 20, 0xAAAAAA);
                 break;
             case 1: // Alerts
-                drawString(fontRendererObj, " Alerts WIP", x, y + 20, 0xAAAAAA);
+                drawString(fontRendererObj, "Alerts WIP", x, y + 20, 0xAAAAAA);
                 break;
             case 2: // Mining
                 drawString(fontRendererObj, "Mining WIP", x, y + 20, 0xAAAAAA);
@@ -105,11 +108,6 @@ public class HomeGUI extends GuiScreen {
                 drawString(fontRendererObj, "Others WIP", x, y + 20, 0xAAAAAA);
                 break;
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }
 

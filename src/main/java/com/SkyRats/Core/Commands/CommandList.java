@@ -1,4 +1,4 @@
-package com.SkyRats.Commands;
+package com.SkyRats.Core.Commands;
 
 import java.util.HashMap;
 import java.util.Map;
