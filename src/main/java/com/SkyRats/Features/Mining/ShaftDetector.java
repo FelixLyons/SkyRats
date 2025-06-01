@@ -120,9 +120,7 @@ public class ShaftDetector {
         //CHeck if player or world is not loaded.
         if(Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
         //Checks if Mineshaft Tracker feature is turned on.
-        if(!SettingsManager.isFeatureEnabled("Mining", "Mineshaft Tracker")) {
-            System.out.println("Mineshaft Tracker is off");
-        }
+        if(!SettingsManager.isFeatureEnabled("Mining", "Mineshaft Tracker")) return;
         //Get player's skyblock location
         String location = PlayerLocationChecker.getLocation();
         //Is player in mineshaft currently
