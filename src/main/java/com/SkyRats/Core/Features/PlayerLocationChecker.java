@@ -11,7 +11,7 @@ import java.util.Collection;
 
 //Checks where the player is currently at on Skyblock.
 public class PlayerLocationChecker {
-    private String location;
+    private static String location;
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {

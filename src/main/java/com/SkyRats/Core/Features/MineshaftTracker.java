@@ -4,7 +4,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class MineshaftTracker {
-    private final Map<ShaftTypes, Integer> shaftCounts = new EnumMap<>(ShaftTypes.class);
+    private final Map<ShaftTypes, Integer> shaftCounts = new EnumMap<ShaftTypes, Integer>(ShaftTypes.class);
 
     public MineshaftTracker() {
         for (ShaftTypes type : ShaftTypes.values()) {
@@ -21,6 +21,10 @@ public class MineshaftTracker {
     }
 
     public int getTotalShafts() {
-        return shaftCounts.values().stream().mapToInt(Integer::intValue).sum();
+        int totalShafts = 0;
+        for (Integer count : shaftCounts.values()) {
+            totalShafts += count;
+        }
+        return totalShafts;
     }
 }
