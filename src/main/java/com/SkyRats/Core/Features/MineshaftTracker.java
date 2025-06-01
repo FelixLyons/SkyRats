@@ -1,6 +1,4 @@
-package com.SkyRats.Features.Mining;
-
-import com.SkyRats.Core.Features.ShaftTypes;
+package com.SkyRats.Core.Features;
 
 import java.util.EnumMap;
 import java.util.Map;

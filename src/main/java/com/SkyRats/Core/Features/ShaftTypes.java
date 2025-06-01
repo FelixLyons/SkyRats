@@ -7,6 +7,7 @@ public enum ShaftTypes {
     AMBER,
     SAPPHIRE,
     TOPAZ,
+    RUBY,
     OPAL,
     AQUAMARINE,
     PERIDOT,

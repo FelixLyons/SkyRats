@@ -3,7 +3,7 @@
   "modid": "skyrats",
   "name": "SkyRats",
   "description": "A client-side QOL mod made for Hypixel Skyblock.",
-  "version": "0.08",
+  "version": "0.1",
   "mcversion": "1.8.9",
   "url": "",
   "updateUrl": "",

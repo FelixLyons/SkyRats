@@ -39,7 +39,7 @@ public class PlayerLocationChecker {
     }
 
 
-    public String getLocation() {
+    public static String getLocation() {
         return location;
     }
 }
