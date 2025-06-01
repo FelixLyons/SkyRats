@@ -15,6 +15,7 @@ public class PlayerLocationChecker {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
+        if(Minecraft.getMinecraft().theWorld == null) return;
         //Gets the scoreboard
         Scoreboard scoreboard = Minecraft.getMinecraft().theWorld.getScoreboard();
         //Gets the sidebar
@@ -26,6 +27,7 @@ public class PlayerLocationChecker {
         for(Score score : scores) {
             //Check for new line or blank lines in the sidebar.
             if(score.getPlayerName() == null || score.getPlayerName().startsWith("#")) continue;
+            if(scoreboard.getPlayersTeam(score.getPlayerName()) == null) continue;
             //Get all sidebar text components and format the text together
             String line = scoreboard.getPlayersTeam(score.getPlayerName()).formatString(score.getPlayerName());
             //Check for Hypixel island on sidebar

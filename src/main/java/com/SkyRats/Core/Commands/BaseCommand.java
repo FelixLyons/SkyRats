@@ -28,4 +28,10 @@ public class BaseCommand extends GuiChat {
         //Send chat message like normal
         super.sendChatMessage(message);
     }
+
+    //When GUI opens, it does not pause the game.
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
 }
