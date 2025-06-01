@@ -1,5 +1,6 @@
 package com.SkyRats.Core.Commands;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 
 public class BaseCommand extends GuiChat {
@@ -17,10 +18,11 @@ public class BaseCommand extends GuiChat {
     public void sendChatMessage(String message) {
         //Intercept message from being sent and execute command if valid.
         if(message.startsWith("/")) {
-            String commandKey = message.substring(1).split(" ")[0];
+            String commandKey = message.substring(1);
             CommandExecution command = CommandList.getCommand(commandKey);
             boolean commandExists = CommandList.hasCommand(commandKey);
             if(commandExists) {
+                Minecraft.getMinecraft().ingameGUI.getChatGUI().addToSentMessages(message);
                 command.execute();
                 return;
             }

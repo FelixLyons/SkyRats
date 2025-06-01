@@ -13,14 +13,15 @@ import net.minecraftforge.common.MinecraftForge;
 public class ClientProxy  {
     private AlertMessagePopup alertPopup = new AlertMessagePopup();
     private MineshaftTracker tracker = new MineshaftTracker();
+    private CommandRegisterAll commands = new CommandRegisterAll(
+            tracker
+    );
 
     public void init() {
         //Register commands
-        CommandRegisterAll.execute();
-
+        commands.execute();
         //User chat binds setup
         CommandKeyInput.getUserBinds();
-
         //Register all events
         MinecraftForge.EVENT_BUS.register(new GuiOpener());
         MinecraftForge.EVENT_BUS.register(new ChatManager(alertPopup));

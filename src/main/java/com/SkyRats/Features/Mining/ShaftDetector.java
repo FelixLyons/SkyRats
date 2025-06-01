@@ -10,11 +10,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.block.Block;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 public class ShaftDetector {
     private MineshaftTracker tracker;
+    private boolean checked = false;
+    private boolean wasInShaft = false;
 
     public ShaftDetector(MineshaftTracker tracker) {
         this.tracker = tracker;
@@ -32,7 +35,7 @@ public class ShaftDetector {
         ShaftTypes detectedType = null;
 
         // Check blocks in a radius around the player
-        int radius = 6;
+        int radius = 10;
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
                 for (int z = -radius; z <= radius; z++) {
@@ -62,7 +65,8 @@ public class ShaftDetector {
 
         if (detectedType != null) {
             tracker.incrementShaft(detectedType);
-            System.out.println("Detected gemstone on screen: " + detectedType);
+            checked = true;
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(detectedType.toString()));
         }
     }
 
@@ -116,8 +120,17 @@ public class ShaftDetector {
         if(Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) return;
         //Get player's skyblock location
         String location = PlayerLocationChecker.getLocation();
-        if(location != null && location.equalsIgnoreCase("Glacite Mineshaft")) {
+        //Is player in mineshaft currently
+        boolean isInShaft = location != null && location.equalsIgnoreCase("Glacite Mineshaft");
+        //Player entered a shaft
+        if(isInShaft && !wasInShaft) {
+            checked = false;
+        }
+
+        if(isInShaft && !checked) {
             detectGemstones();
         }
+
+        wasInShaft = isInShaft;
     }
 }
