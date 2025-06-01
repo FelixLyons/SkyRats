@@ -3,6 +3,7 @@ package com.SkyRats;
 import com.SkyRats.Core.Commands.BaseCommand;
 import com.SkyRats.Core.Commands.CommandRegisterAll;
 import com.SkyRats.Core.Features.ChatManager;
+import com.SkyRats.Core.Features.PlayerLocationChecker;
 import com.SkyRats.Core.GUI.GuiOpener;
 import com.SkyRats.Core.Features.AlertMessagePopup;
 import net.minecraft.client.Minecraft;
@@ -36,6 +37,7 @@ public class SkyRats
         MinecraftForge.EVENT_BUS.register(new GuiOpener());
         MinecraftForge.EVENT_BUS.register(new ChatManager(alertPopup));
         MinecraftForge.EVENT_BUS.register(alertPopup);
+        MinecraftForge.EVENT_BUS.register(new PlayerLocationChecker());
 		MinecraftForge.EVENT_BUS.register(this);
     }
 
