@@ -23,7 +23,7 @@ public class ShaftCommand implements CommandExecution {
 
         List<Map.Entry<ShaftTypes, Integer>> entries = new ArrayList<Map.Entry<ShaftTypes, Integer>>();
 
-        for (ShaftTypes type : ShaftTypes.values()) {
+        for(ShaftTypes type : ShaftTypes.values()) {
             int count = mineshaftTracker.getCount(type);
             if (count > 0) {
                 entries.add(new AbstractMap.SimpleEntry<ShaftTypes, Integer>(type, count));
@@ -38,9 +38,11 @@ public class ShaftCommand implements CommandExecution {
             }
         });
 
-        //Display results
-        for (Map.Entry<ShaftTypes, Integer> entry : entries) {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText( EnumChatFormatting.AQUA + entry.getKey().name() + ": " + EnumChatFormatting.YELLOW + entry.getValue()));
+        //Display results along with their own colors
+        for(Map.Entry<ShaftTypes, Integer> entry : entries) {
+            ShaftTypes type = entry.getKey();
+            int count = entry.getValue();
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText( type.getColor() + type.name() + ": " + EnumChatFormatting.YELLOW + count));
         }
 
         //Total shafts

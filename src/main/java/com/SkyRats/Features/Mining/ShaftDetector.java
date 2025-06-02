@@ -4,6 +4,7 @@ import com.SkyRats.Core.Features.MineshaftTracker;
 import com.SkyRats.Core.Features.PlayerLocationChecker;
 import com.SkyRats.Core.Features.SettingsManager;
 import com.SkyRats.Core.Features.ShaftTypes;
+import ibxm.Player;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
@@ -16,6 +17,7 @@ public class ShaftDetector {
     private MineshaftTracker tracker;
     private boolean checked = false;
     private boolean wasInShaft = false;
+    private boolean isInShaft = false;
     private int tickCooldown = 0;
     private static final int COOLDOWN_TIME = 35;
 
@@ -65,7 +67,9 @@ public class ShaftDetector {
         if (detectedType != null && !checked) {
             tracker.incrementShaft(detectedType);
             checked = true;
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("[SR ShaftDetector] Detected: " + detectedType.toString()));
+            //Combine color code + string then reset formatting for next
+            String colorName = detectedType.getColor() + detectedType.name() + EnumChatFormatting.RESET;
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "[SR ShaftDetection] Detected: " + colorName));
         }
     }
 
@@ -133,16 +137,18 @@ public class ShaftDetector {
         //Get player's skyblock location
         String location = PlayerLocationChecker.getLocation();
         //Is player in mineshaft currently
-        boolean isInShaft = location != null && location.equalsIgnoreCase("Glacite Mineshaft");
-        //Player entered a shaft
-        if(isInShaft && !wasInShaft) {
-            checked = false;
-        }
+        if(location.equalsIgnoreCase("Glacite Mineshafts")) {
+            //Player entered a shaft
+            isInShaft = true;
+            if(isInShaft && !wasInShaft) {
+                checked = false;
+            }
 
-        if(isInShaft && !checked) {
-            detectGemstones();
-        }
+            if(isInShaft && !checked) {
+                detectGemstones();
+            }
 
-        wasInShaft = isInShaft;
+            wasInShaft = isInShaft;
+        }
     }
 }

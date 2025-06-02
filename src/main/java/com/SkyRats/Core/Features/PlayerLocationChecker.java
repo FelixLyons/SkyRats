@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.scoreboard.ScorePlayerTeam;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -14,6 +16,27 @@ public class PlayerLocationChecker {
     private static String location;
     private int tickCooldown = 0;
     private static final int COOLDOWN_TIME = 20;
+
+    //Remove non char letters (emojis and stuff). i hate minecraft
+    public static String removeSurrogatePairs(String input) {
+        if (input == null) return null;
+
+        StringBuilder sb = new StringBuilder();
+        int length = input.length();
+
+        for (int offset = 0; offset < length; ) {
+            int codePoint = input.codePointAt(offset);
+
+            // Only keep code points inside BMP (<= 0xFFFF)
+            if (codePoint <= 0xFFFF) {
+                sb.append((char) codePoint);
+            }
+
+            offset += Character.charCount(codePoint);
+        }
+
+        return sb.toString();
+    }
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -37,14 +60,22 @@ public class PlayerLocationChecker {
         Collection<Score> scores = scoreboard.getSortedScores(sidebar);
         for(Score score : scores) {
             String rawLine = score.getPlayerName();
+            String formattedLine = rawLine;
+            ScorePlayerTeam team = scoreboard.getPlayersTeam(rawLine);
             //Check for new line or blank lines in the sidebar.
             if(rawLine == null || rawLine.startsWith("#")) continue;
             //Get all sidebar text components and format the text together
-            String line = rawLine.replaceAll("§.", "");
+            if(scoreboard.getPlayersTeam(rawLine) != null) {
+                // Combine prefix + playerName + suffix to get the full line
+                formattedLine = team.getColorPrefix() + rawLine + team.getColorSuffix();
+            }
             //Check for Hypixel island on sidebar
-            if(line.contains("⏣")) {
+            if(formattedLine.contains(Character.toString((char)0x23e3))) {
                 //Get the island name and remove all unnecessary word parts.
-                location = line.replace("⏣", "").trim();
+                location = EnumChatFormatting.getTextWithoutFormattingCodes(formattedLine)
+                        .replace(Character.toString((char)0x23e3), "")
+                        .trim();
+                location = removeSurrogatePairs(location).trim();
                 break;
             }
         }

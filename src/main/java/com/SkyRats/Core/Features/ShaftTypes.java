@@ -1,19 +1,40 @@
 package com.SkyRats.Core.Features;
 
+import net.minecraft.util.EnumChatFormatting;
+
+import java.util.EnumSet;
+
+//All ShaftTypes and their respected color
 public enum ShaftTypes {
-    JASPER,
-    JADE,
-    AMETHYST,
-    AMBER,
-    SAPPHIRE,
-    TOPAZ,
-    RUBY,
-    OPAL,
-    AQUAMARINE,
-    PERIDOT,
-    ONYX,
-    CITRINE,
-    TUNGSTEN,
-    TITANIUM,
-    VANGUARD;
+    JASPER(EnumChatFormatting.LIGHT_PURPLE),
+    JADE(EnumChatFormatting.GREEN),
+    AMETHYST(EnumChatFormatting.DARK_PURPLE),
+    AMBER(EnumChatFormatting.GOLD),
+    SAPPHIRE(EnumChatFormatting.AQUA),
+    TOPAZ(EnumChatFormatting.YELLOW),
+    RUBY(EnumChatFormatting.RED),
+    OPAL(EnumChatFormatting.WHITE),
+    AQUAMARINE(EnumChatFormatting.DARK_AQUA),
+    PERIDOT(EnumChatFormatting.DARK_GREEN),
+    ONYX(EnumChatFormatting.BLACK),
+    CITRINE(EnumChatFormatting.DARK_RED),
+    TUNGSTEN(EnumChatFormatting.DARK_GRAY),
+    TITANIUM(EnumChatFormatting.GRAY),
+    VANGUARD(EnumChatFormatting.OBFUSCATED + "" + EnumChatFormatting.GOLD);
+
+    private final String color;
+
+    ShaftTypes(EnumChatFormatting color) {
+        this.color = color.toString();
+    }
+
+    //For VANGUARDs
+    ShaftTypes(String formatted) {
+        this.color = formatted;
+    }
+
+    //Get the color for text coloring
+    public String getColor() {
+        return this.color;
+    }
 }
