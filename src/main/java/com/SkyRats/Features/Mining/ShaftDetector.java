@@ -4,7 +4,6 @@ import com.SkyRats.Core.Features.MineshaftTracker;
 import com.SkyRats.Core.Features.PlayerLocationChecker;
 import com.SkyRats.Core.Features.SettingsManager;
 import com.SkyRats.Core.Features.ShaftTypes;
-import ibxm.Player;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
@@ -17,7 +16,6 @@ public class ShaftDetector {
     private MineshaftTracker tracker;
     private boolean checked = false;
     private boolean wasInShaft = false;
-    private boolean isInShaft = false;
     private int tickCooldown = 0;
     private static final int COOLDOWN_TIME = 35;
 
@@ -86,6 +84,11 @@ public class ShaftDetector {
             }
         }else if(block == Blocks.clay) {
             return ShaftTypes.TUNGSTEN;
+        }else if(block == Blocks.stained_hardened_clay) {
+            //Orange Terracotta
+            if(meta == 1) {
+                return ShaftTypes.UMBER;
+            }
         }else if(block == Blocks.stained_glass) {
             //Gets the glass color
             switch(meta) {
@@ -137,18 +140,16 @@ public class ShaftDetector {
         //Get player's skyblock location
         String location = PlayerLocationChecker.getLocation();
         //Is player in mineshaft currently
-        if(location.equalsIgnoreCase("Glacite Mineshafts")) {
-            //Player entered a shaft
-            isInShaft = true;
-            if(isInShaft && !wasInShaft) {
-                checked = false;
-            }
-
-            if(isInShaft && !checked) {
-                detectGemstones();
-            }
-
-            wasInShaft = isInShaft;
+        boolean isInShaft = location.equalsIgnoreCase("Glacite Mineshafts");
+        //Player entered a shaft
+        if(isInShaft && !wasInShaft) {
+            checked = false;
         }
+
+        if(isInShaft && !checked) {
+            detectGemstones();
+        }
+
+        wasInShaft = isInShaft;
     }
 }

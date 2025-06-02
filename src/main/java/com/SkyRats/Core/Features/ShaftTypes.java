@@ -19,6 +19,7 @@ public enum ShaftTypes {
     ONYX(EnumChatFormatting.BLACK),
     CITRINE(EnumChatFormatting.DARK_RED),
     TUNGSTEN(EnumChatFormatting.DARK_GRAY),
+    UMBER(EnumChatFormatting.DARK_RED),
     TITANIUM(EnumChatFormatting.GRAY),
     VANGUARD(EnumChatFormatting.OBFUSCATED + "" + EnumChatFormatting.GOLD);
 
