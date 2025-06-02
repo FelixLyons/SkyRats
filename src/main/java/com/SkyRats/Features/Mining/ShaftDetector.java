@@ -157,6 +157,6 @@ public class ShaftDetector {
         wasInShaft = isInShaft;
 
         //Additional condition to prevent double check if server lags/location flickering while inside Mineshaft
-        if(location.equalsIgnoreCase("Glacite Tunnels") || location.equalsIgnoreCase("Dwarven Base Camp")) typeSent = false;
+        if((location.equalsIgnoreCase("Glacite Tunnels") || location.equalsIgnoreCase("Dwarven Base Camp")) && typeSent) typeSent = false;
     }
 }
