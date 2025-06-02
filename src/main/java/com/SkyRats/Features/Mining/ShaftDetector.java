@@ -16,6 +16,7 @@ public class ShaftDetector {
     private MineshaftTracker tracker;
     private boolean checked = false;
     private boolean wasInShaft = false;
+    private boolean typeSent = false;
     private int tickCooldown = 0;
     private static final int COOLDOWN_TIME = 35;
 
@@ -30,9 +31,9 @@ public class ShaftDetector {
         Vec3 eyePos = Minecraft.getMinecraft().thePlayer.getPositionEyes(1.0f);
         Vec3 lookVec = Minecraft.getMinecraft().thePlayer.getLook(1.0f);
 
-        final int numRays = 30;          // More rays = wider coverage. Too much will cause lag so beware.
-        final float coneAngle = 1.30f;    // Wider angle (in radians)
-        final double maxDistance = 10.0; // Max block detection distance
+        final int numRays = 35;          // More rays = wider coverage. Too much will cause lag so beware.
+        final float coneAngle = 1.33f;    // Wider angle (in radians)
+        final double maxDistance = 15.0; // Max block detection distance
 
         ShaftTypes detectedType = null;
 
@@ -68,6 +69,7 @@ public class ShaftDetector {
             //Combine color code + string then reset formatting for next
             String colorName = detectedType.getColor() + detectedType.name() + EnumChatFormatting.RESET;
             Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "[SR ShaftDetection] Detected: " + colorName));
+            typeSent = true;
         }
     }
 
@@ -139,6 +141,7 @@ public class ShaftDetector {
         if(!SettingsManager.isFeatureEnabled("Mining", "Mineshaft Tracker")) return;
         //Get player's skyblock location
         String location = PlayerLocationChecker.getLocation();
+        if(location.equalsIgnoreCase("N/A")) return;
         //Is player in mineshaft currently
         boolean isInShaft = location.equalsIgnoreCase("Glacite Mineshafts");
         //Player entered a shaft
@@ -148,8 +151,12 @@ public class ShaftDetector {
 
         if(isInShaft && !checked) {
             detectGemstones();
+            Minecraft.getMinecraft().thePlayer.playSound("random_orb", 1.0F, 1.0F); //Play xp orb sound after detect
         }
 
         wasInShaft = isInShaft;
+
+        //Additional condition to prevent double check if server lags/location flickering while inside Mineshaft
+        if(location.equalsIgnoreCase("Glacite Tunnels") || location.equalsIgnoreCase("Dwarven Base Camp")) typeSent = false;
     }
 }

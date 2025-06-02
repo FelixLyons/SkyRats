@@ -21,17 +21,12 @@ public enum ShaftTypes {
     TUNGSTEN(EnumChatFormatting.DARK_GRAY),
     UMBER(EnumChatFormatting.DARK_RED),
     TITANIUM(EnumChatFormatting.GRAY),
-    VANGUARD(EnumChatFormatting.OBFUSCATED + "" + EnumChatFormatting.GOLD);
+    VANGUARD(EnumChatFormatting.YELLOW);
 
     private final String color;
 
     ShaftTypes(EnumChatFormatting color) {
         this.color = color.toString();
-    }
-
-    //For VANGUARDs
-    ShaftTypes(String formatted) {
-        this.color = formatted;
     }
 
     //Get the color for text coloring

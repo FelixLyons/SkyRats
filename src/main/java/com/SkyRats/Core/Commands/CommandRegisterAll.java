@@ -15,7 +15,7 @@ public class CommandRegisterAll {
 
     public void execute() {
         CommandList.register("sr", new MenuCommand());
-        CommandList.register("sr shaft", new ShaftCommand(mineshaftTracker));
+        CommandList.register("sr shafts", new ShaftCommand(mineshaftTracker));
         CommandList.register("sr wmi", new LocationCommand());
     }
 }
