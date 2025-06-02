@@ -6,12 +6,9 @@ import com.SkyRats.Core.Features.SettingsManager;
 import com.SkyRats.Core.Features.ShaftTypes;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.*;
 import net.minecraft.block.Block;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -20,59 +17,59 @@ public class ShaftDetector {
     private boolean checked = false;
     private boolean wasInShaft = false;
     private int tickCooldown = 0;
-    private static final int COOLDOWN_TIME = 20;
+    private static final int COOLDOWN_TIME = 35;
 
     public ShaftDetector(MineshaftTracker tracker) {
         this.tracker = tracker;
     }
 
+    //Detect blocks on player's screen
     public void detectGemstones() {
         if (Minecraft.getMinecraft().theWorld == null || Minecraft.getMinecraft().thePlayer == null) return;
 
-        // Create frustum from current camera info. Frustum is used for what the player sees on screen.
-        Frustum frustum = new Frustum();
-        frustum.setPosition(Minecraft.getMinecraft().getRenderViewEntity().posX, Minecraft.getMinecraft().getRenderViewEntity().posY, Minecraft.getMinecraft().getRenderViewEntity().posZ);
+        Vec3 eyePos = Minecraft.getMinecraft().thePlayer.getPositionEyes(1.0f);
+        Vec3 lookVec = Minecraft.getMinecraft().thePlayer.getLook(1.0f);
 
-        BlockPos playerPos = Minecraft.getMinecraft().thePlayer.getPosition();
+        final int numRays = 30;          // More rays = wider coverage. Too much will cause lag so beware.
+        final float coneAngle = 1.30f;    // Wider angle (in radians)
+        final double maxDistance = 10.0; // Max block detection distance
 
         ShaftTypes detectedType = null;
 
-        // Check blocks in a radius around the player
-        int radius = 10;
-        for (int x = -radius; x <= radius; x++) {
-            for (int y = -radius; y <= radius; y++) {
-                for (int z = -radius; z <= radius; z++) {
-                    BlockPos pos = playerPos.add(x, y, z);
-                    IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(pos);
-                    Block block = state.getBlock();
+        for (int i = 0; i < numRays; i++) {
+            // Random direction slightly offset from main lookVec
+            Vec3 randomVec = lookVec
+                    .addVector(
+                            (Minecraft.getMinecraft().theWorld.rand.nextFloat() - 0.5f) * coneAngle,
+                            (Minecraft.getMinecraft().theWorld.rand.nextFloat() - 0.5f) * coneAngle,
+                            (Minecraft.getMinecraft().theWorld.rand.nextFloat() - 0.5f) * coneAngle
+                    )
+                    .normalize();
 
-                    // Get the bounding box of the block
-                    AxisAlignedBB aabb = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(),
-                            pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1
-                    );
+            Vec3 rayEnd = eyePos.addVector(randomVec.xCoord * maxDistance, randomVec.yCoord * maxDistance, randomVec.zCoord * maxDistance);
+            MovingObjectPosition hit = Minecraft.getMinecraft().theWorld.rayTraceBlocks(eyePos, rayEnd);
 
+            if (hit != null && hit.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+                BlockPos pos = hit.getBlockPos();
+                IBlockState state = Minecraft.getMinecraft().theWorld.getBlockState(pos);
+                Block block = state.getBlock();
 
-                    // Check if the block is in the camera frustum
-                    if (frustum.isBoundingBoxInFrustum(aabb)) {
-                        ShaftTypes type = mapBlockToShaftType(block, state);
-                        if (type != null) {
-                            detectedType = type;
-                            break;
-                        }
-                    }
+                ShaftTypes type = mapBlockToShaftType(block, state);
+                if (type != null) {
+                    detectedType = type;
+                    break;
                 }
-                if (detectedType != null) break;
             }
-            if (detectedType != null) break;
         }
 
-        if (detectedType != null) {
+        if (detectedType != null && !checked) {
             tracker.incrementShaft(detectedType);
             checked = true;
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(detectedType.toString()));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("[SR ShaftDetector] Detected: " + detectedType.toString()));
         }
     }
 
+    //Return type of Mineshaft from block type
     private ShaftTypes mapBlockToShaftType(Block block, IBlockState state) {
         int meta = block.getMetaFromState(state);
         // Maps gemstone blocks to ShaftTypes here
@@ -117,6 +114,7 @@ public class ShaftDetector {
         return null;
     }
 
+    //Check Mineshaft every 35 ticks (3.5 seconds) if player is in Mineshaft
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         //CHeck if player or world is not loaded.

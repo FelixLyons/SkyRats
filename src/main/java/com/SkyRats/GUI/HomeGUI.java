@@ -4,6 +4,7 @@ import com.SkyRats.Core.Features.FeatureSettings;
 import com.SkyRats.Core.Features.SettingButtons;
 import com.SkyRats.Core.Features.SettingsManager;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +43,7 @@ public class HomeGUI extends GuiScreen {
         //Title and creator
         int startY = panelY;
         int yPos = startY + 10;
-        drawString(fontRendererObj, "§l" + "SkyRats", panelX + 10, yPos, 0xCCCCCC);
+        drawString(fontRendererObj, EnumChatFormatting.AQUA + "" + EnumChatFormatting.BOLD + "SkyRats", panelX + 10, yPos, 0xCCCCCC);
         drawString(fontRendererObj, "By Sunaio & A_Blender_", panelX + 10, yPos + 11, 0xCCCCCC);
 
         // Draw feature texts on left panel
@@ -56,13 +57,13 @@ public class HomeGUI extends GuiScreen {
             // Highlight selected or hovered text
             if (i == selectedFeature) {
                 // light blue and underlined if selected
-                drawString(fontRendererObj, "§n"+ features[i], panelX + 10, yPos, 0xFF55FFFF);
+                drawString(fontRendererObj, EnumChatFormatting.UNDERLINE + features[i], panelX + 10, yPos, 0x55FFFF);
             } else if (isHover) {
                 // light blue on hover
-                drawString(fontRendererObj, features[i], panelX + 10, yPos, 0xFF55FFFF);
+                drawString(fontRendererObj, features[i], panelX + 10, yPos, 0x55FFFF);
             } else {
                 // normal color (white)
-                drawString(fontRendererObj, features[i], panelX + 10, yPos, 0xFFFFFFFF);
+                drawString(fontRendererObj, features[i], panelX + 10, yPos, 0xFFFFFF);
             }
         }
 

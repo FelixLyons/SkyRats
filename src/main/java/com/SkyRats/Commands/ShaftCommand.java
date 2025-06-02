@@ -5,6 +5,7 @@ import com.SkyRats.Core.Features.MineshaftTracker;
 import com.SkyRats.Core.Features.ShaftTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
 
@@ -18,7 +19,7 @@ public class ShaftCommand implements CommandExecution {
 
     @Override
     public void execute() {
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("§aShafts Data:"));
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Shaft Data:"));
 
         List<Map.Entry<ShaftTypes, Integer>> entries = new ArrayList<Map.Entry<ShaftTypes, Integer>>();
 
@@ -39,10 +40,10 @@ public class ShaftCommand implements CommandExecution {
 
         //Display results
         for (Map.Entry<ShaftTypes, Integer> entry : entries) {
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("§b" + entry.getKey().name() + ": §e" + entry.getValue()));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText( EnumChatFormatting.AQUA + entry.getKey().name() + ": " + EnumChatFormatting.YELLOW + entry.getValue()));
         }
 
         //Total shafts
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("§7Total: §a" + mineshaftTracker.getTotalShafts()));
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Total: " + EnumChatFormatting.GREEN + mineshaftTracker.getTotalShafts()));
     }
 }

@@ -36,15 +36,16 @@ public class PlayerLocationChecker {
         //Gets each line on the sidebar
         Collection<Score> scores = scoreboard.getSortedScores(sidebar);
         for(Score score : scores) {
+            String rawLine = score.getPlayerName();
             //Check for new line or blank lines in the sidebar.
-            if(score.getPlayerName() == null || score.getPlayerName().startsWith("#")) continue;
-            if(scoreboard.getPlayersTeam(score.getPlayerName()) == null) continue;
+            if(rawLine == null || rawLine.startsWith("#")) continue;
             //Get all sidebar text components and format the text together
-            String line = scoreboard.getPlayersTeam(score.getPlayerName()).formatString(score.getPlayerName());
+            String line = rawLine.replaceAll("§.", "");
             //Check for Hypixel island on sidebar
             if(line.contains("⏣")) {
                 //Get the island name and remove all unnecessary word parts.
-                location = line.replace("⏣", "").replaceAll("§.", "").trim();
+                location = line.replace("⏣", "").trim();
+                break;
             }
         }
     }
