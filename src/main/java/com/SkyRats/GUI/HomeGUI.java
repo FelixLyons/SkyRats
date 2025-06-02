@@ -42,7 +42,7 @@ public class HomeGUI extends GuiScreen {
         //Title and creator
         int startY = panelY;
         int yPos = startY + 10;
-        drawString(fontRendererObj, "§lSkyRats", panelX + 10, yPos, 0xCCCCCC);
+        drawString(fontRendererObj, "§l" + "SkyRats", panelX + 10, yPos, 0xCCCCCC);
         drawString(fontRendererObj, "By Sunaio & A_Blender_", panelX + 10, yPos + 11, 0xCCCCCC);
 
         // Draw feature texts on left panel

@@ -12,10 +12,21 @@ import java.util.Collection;
 //Checks where the player is currently at on Skyblock.
 public class PlayerLocationChecker {
     private static String location;
+    private int tickCooldown = 0;
+    private static final int COOLDOWN_TIME = 20;
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if(Minecraft.getMinecraft().theWorld == null) return;
+        //Tick Cooldown to help with performance
+        if(tickCooldown > 0) {
+            tickCooldown--;
+            return;
+        }
+
+        //Reset cooldown
+        tickCooldown = COOLDOWN_TIME;
+
         //Gets the scoreboard
         Scoreboard scoreboard = Minecraft.getMinecraft().theWorld.getScoreboard();
         //Gets the sidebar
@@ -40,6 +51,10 @@ public class PlayerLocationChecker {
 
 
     public static String getLocation() {
-        return location;
+        if(location != null) {
+            return location;
+        }else {
+            return "N/A";
+        }
     }
 }

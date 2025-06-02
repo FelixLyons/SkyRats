@@ -19,6 +19,8 @@ public class ShaftDetector {
     private MineshaftTracker tracker;
     private boolean checked = false;
     private boolean wasInShaft = false;
+    private int tickCooldown = 0;
+    private static final int COOLDOWN_TIME = 20;
 
     public ShaftDetector(MineshaftTracker tracker) {
         this.tracker = tracker;
@@ -119,6 +121,15 @@ public class ShaftDetector {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         //CHeck if player or world is not loaded.
         if(Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
+        //Tick Cooldown to help with performance
+        if(tickCooldown > 0) {
+            tickCooldown--;
+            return;
+        }
+
+        //Reset cooldown
+        tickCooldown = COOLDOWN_TIME;
+
         //Checks if Mineshaft Tracker feature is turned on.
         if(!SettingsManager.isFeatureEnabled("Mining", "Mineshaft Tracker")) return;
         //Get player's skyblock location
