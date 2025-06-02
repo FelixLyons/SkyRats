@@ -8,7 +8,7 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 > **We are not responsible** for any consequences, including bans, warnings, or penalties.  
 > By using this mod, you acknowledge and accept all risks involved.
 
----
+
 
 ## Features
 
@@ -43,7 +43,7 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 *More coming soon...*
 </details>
 
----
+
 
 ## Installation
 
@@ -53,7 +53,7 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 4. Launch Minecraft with the **Forge** profile.
 5. The mod will auto-load when you join **Hypixel Skyblock**.
 
----
+
 
 ## Commands
 
@@ -63,7 +63,7 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 | `/sr shafts` | Show all the mineshafts type and amount that you have entered. |
 | `/sr wmi` | Display your current island/location.                          |
 
----
+
 
 ## Troubleshooting
 
@@ -71,12 +71,12 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 - Look for mod conflicts or missing dependencies.
 - If issues persist, create a ticket in [GitHub Issues](https://github.com/FelixLyons/SkyRats/issues) with detailed logs and steps to reproduce.
 
----
+
 
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
 
----
+
 
 > 🫡 Good luck and happy grinding!
