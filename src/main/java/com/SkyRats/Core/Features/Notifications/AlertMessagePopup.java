@@ -1,4 +1,4 @@
-package com.SkyRats.Core.Features;
+package com.SkyRats.Core.Features.Notifications;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
@@ -35,7 +35,7 @@ public class AlertMessagePopup {
             //Shows scaled text on screen
             GlStateManager.pushMatrix();
             GlStateManager.scale(scale, scale, scale);
-            Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(msg, x, y, 0x0000AA);
+            Minecraft.getMinecraft().fontRendererObj.drawString(msg, Math.round(x), Math.round(y), 0xFFFFC0CB);
             GlStateManager.popMatrix();
         }
     }

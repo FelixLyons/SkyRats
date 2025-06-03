@@ -1,7 +1,7 @@
 package com.SkyRats.Features.Alerts;
 
-import com.SkyRats.Core.Features.AlertMessagePopup;
-import com.SkyRats.Core.Features.SettingsManager;
+import com.SkyRats.Core.Features.Notifications.AlertMessagePopup;
+import com.SkyRats.Core.GUI.FeatureSettings;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -16,8 +16,12 @@ public class ChatManager {
         String msg = event.message.getUnformattedText();
 
         // Check for different alert types
-        if(SettingsManager.isFeatureEnabled("Alerts", "Mining Ability Cooldown Notification")) {
+        if(FeatureSettings.isFeatureEnabled("Alerts", "Mining Ability Cooldown Notification")) {
             MiningAbilityAlert.check(msg, alertMessagePopup);
+        }
+
+        if(FeatureSettings.isFeatureEnabled("Alerts", "Reminder to Switch Ability Notification")) {
+            SwitchAlert.check(msg, alertMessagePopup);
         }
     }
 

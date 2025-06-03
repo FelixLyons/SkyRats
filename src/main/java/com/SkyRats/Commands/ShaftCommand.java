@@ -1,8 +1,8 @@
 package com.SkyRats.Commands;
 
 import com.SkyRats.Core.Commands.CommandExecution;
-import com.SkyRats.Core.Features.MineshaftTracker;
-import com.SkyRats.Core.Features.ShaftTypes;
+import com.SkyRats.Core.Features.Mineshafts.MineshaftTracker;
+import com.SkyRats.Core.Features.Mineshafts.ShaftTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
@@ -42,10 +42,16 @@ public class ShaftCommand implements CommandExecution {
         for(Map.Entry<ShaftTypes, Integer> entry : entries) {
             ShaftTypes type = entry.getKey();
             int count = entry.getValue();
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText( type.getColor() + type.name() + ": " + EnumChatFormatting.YELLOW + count));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText( type.getColor() + type.name() + ": "
+                    + EnumChatFormatting.YELLOW + count));
         }
 
         //Total shafts
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Total: " + EnumChatFormatting.GREEN + mineshaftTracker.getTotalShafts()));
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Total: "
+                + EnumChatFormatting.GREEN + mineshaftTracker.getTotalShafts()));
+
+        //Time since last Jasper shaft
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Mineshafts since last "
+                + EnumChatFormatting.LIGHT_PURPLE + "JASPER" + EnumChatFormatting.RESET + ": " + EnumChatFormatting.RED + mineshaftTracker.getSinceJasper()));
     }
 }

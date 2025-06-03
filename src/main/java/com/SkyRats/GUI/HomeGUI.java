@@ -1,22 +1,26 @@
 package com.SkyRats.GUI;
 
-import com.SkyRats.Core.Features.FeatureSettings;
-import com.SkyRats.Core.Features.SettingButtons;
-import com.SkyRats.Core.Features.SettingsManager;
+import com.SkyRats.Core.Features.ColorAnimations;
+import com.SkyRats.Core.GUI.FeatureSettings;
+import com.SkyRats.Core.GUI.Settings;
+import com.SkyRats.Core.GUI.SettingsManager;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 public class HomeGUI extends GuiScreen {
 
+    private final File featureFile = new File("SkyRats/settings.json");
     private int selectedFeature = 0;
-    private final String[] features = {"Home", "Alerts", "Mining", "Rift", "Others"};
-    private final int panelWidth = 500;
-    private final int panelHeight = 320;
+    private final String[] features = {"Home", "Alerts", "Mining", "Rift", "HUD", "Others"};
     private final int leftPanelWidth = 150;
-    private final int totalWidth = leftPanelWidth + 350;
+    private final int rightPanelWidth = 430;
+    private final int panelWidth = leftPanelWidth + rightPanelWidth;
+    private final int panelHeight = 320;
 
     public HomeGUI() {
         FeatureSettings.run();
@@ -30,21 +34,42 @@ public class HomeGUI extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
+        // Chroma Color
+        int chroma = ColorAnimations.getChromaColor(8f, 0f);
 
-        //Panel sizes
-        int panelX = (width - totalWidth) / 2;
+        // Panel sizes
+        int panelX = (width - panelWidth) / 2;
         int panelY = (height - panelHeight) / 2;
 
         // Draw left panel background
         drawRect(panelX, panelY, panelX + leftPanelWidth, panelY + panelHeight, 0xCC111111);
         // Draw right panel background
-        drawRect(panelX + leftPanelWidth, panelY, panelX + panelWidth, panelY + panelHeight, 0xAA333333);
+        drawRect(panelX + leftPanelWidth, panelY, panelX + panelWidth, panelY + panelHeight, 0xCC111111);
 
-        //Title and creator
+        // Title and creator
         int startY = panelY;
         int yPos = startY + 10;
-        drawString(fontRendererObj, EnumChatFormatting.AQUA + "" + EnumChatFormatting.BOLD + "SkyRats", panelX + 10, yPos, 0xCCCCCC);
-        drawString(fontRendererObj, "By Sunaio & A_Blender_", panelX + 10, yPos + 11, 0xCCCCCC);
+        drawString(fontRendererObj,
+                EnumChatFormatting.BOLD + "" + EnumChatFormatting.UNDERLINE + "SkyRats",
+                panelX + 10,
+                yPos,
+                chroma);
+        // Making text smaller for creator
+        GlStateManager.pushMatrix();
+        // Scaled down by 10%
+        GlStateManager.scale(0.87F, 0.87F, 1.0F);
+        fontRendererObj.drawString(
+                EnumChatFormatting.BOLD + "By Sunaio & A_Blender_",
+                (int) ((panelX + 10) / 0.87F),
+                (int) ((yPos + 14) / 0.87F),
+                chroma
+        );
+
+        GlStateManager.popMatrix();
+
+        // Draw vertical separator line between panels
+        int lineX = panelX + leftPanelWidth;
+        drawRect(lineX, panelY, lineX + 1, panelY + panelHeight, chroma);
 
         // Draw feature texts on left panel
         startY = panelY + 40;
@@ -52,15 +77,21 @@ public class HomeGUI extends GuiScreen {
             yPos = startY + i * 22;
 
             // Check if mouse is hovering over this feature text
-            boolean isHover = mouseX >= panelX + 10 && mouseX <= panelX + leftPanelWidth - 10 && mouseY >= yPos && mouseY <= yPos + 12;
+            boolean isHover = mouseX >= panelX + 10
+                    && mouseX <= panelX + leftPanelWidth - 10
+                    && mouseY >= yPos
+                    && mouseY <= yPos + 12;
 
             // Highlight selected or hovered text
             if (i == selectedFeature) {
                 // light blue and underlined if selected
-                drawString(fontRendererObj, EnumChatFormatting.UNDERLINE + features[i], panelX + 10, yPos, 0x55FFFF);
+                drawString(fontRendererObj,
+                        EnumChatFormatting.UNDERLINE + features[i],
+                        panelX + 10, yPos,
+                        0x55FFFF);
             } else if (isHover) {
                 // light blue on hover
-                drawString(fontRendererObj, features[i], panelX + 10, yPos, 0x55FFFF);
+                drawString(fontRendererObj,features[i], panelX + 10, yPos, 0x55FFFF);
             } else {
                 // normal color (white)
                 drawString(fontRendererObj, features[i], panelX + 10, yPos, 0xFFFFFF);
@@ -79,9 +110,9 @@ public class HomeGUI extends GuiScreen {
         if (mouseButton == 0) {
             // Check for toggle interaction
             String featureKey = features[selectedFeature];
-            List<SettingButtons> toggles = SettingsManager.getFeatureToggles(featureKey);
+            List<Settings> toggles = FeatureSettings.getFeatureSettings().get(featureKey);
             if (toggles != null) {
-                for (SettingButtons toggle : toggles) {
+                for (Settings toggle : toggles) {
                     if (toggle.isHovered(mouseX, mouseY)) {
                         toggle.toggle();
                         return;
@@ -108,27 +139,55 @@ public class HomeGUI extends GuiScreen {
 
     //Right panel of GUI where all settings for selected feature is displayed.
     private void drawRightPanelContent(int x, int y, int mouseX, int mouseY) {
-        String title = "Settings";
-        drawString(fontRendererObj, title, x, y, 0xFFFFFFFF);
-        List<SettingButtons> toggles = SettingsManager.getFeatureToggles(features[selectedFeature]);
+        int chroma = ColorAnimations.getChromaColor(8f, 0f);
+        drawString(fontRendererObj, EnumChatFormatting.UNDERLINE + "" + EnumChatFormatting.BOLD + features[selectedFeature],
+                x,
+                y,
+                chroma);
 
-        if (toggles != null && !toggles.isEmpty()) {
-            int offsetY = y + 20;
-            for (SettingButtons toggle : toggles) {
-                toggle.setX(x);
-                toggle.setY(offsetY);
-                toggle.draw(mc, mouseX, mouseY);
-                offsetY += toggle.getHeight() + 5;
-            }
-        } else {
+        List<Settings> toggles = FeatureSettings.getFeatureSettings().get(features[selectedFeature]);
+        if (toggles == null || toggles.isEmpty()) {
             drawString(fontRendererObj, "WIP", x, y + 20, 0xAAAAAA);
+            return;
+        }
+
+        int offsetY = y + 20;
+
+        for (Settings toggle : toggles) {
+            toggle.setX(x);
+            toggle.setY(offsetY);
+
+            // Draw label with blue if ON, dark gray if OFF
+            int labelColor = toggle.getValue() ? 0xFF3F76E4 : 0xFF555555; // blue if on or gray if off
+            fontRendererObj.drawString(toggle.getLabel(), x, offsetY + 4, labelColor);
+            toggle.draw(mc, mouseX, mouseY);
+
+            String desc = toggle.getDescription();
+            offsetY += toggle.getHeight();
+
+            if (desc != null && !desc.isEmpty()) {
+                // Scaling down text size
+                GlStateManager.pushMatrix();
+                GlStateManager.scale(0.77F, 0.77F, 1.0F);
+                int descColor = toggle.getValue() ? 0xFFFFFFFF : 0xFF555555;  // white if ON, gray if OFF
+                drawString(fontRendererObj,
+                        desc,
+                        (int) ((x + 4) / 0.77F),
+                        (int) ((offsetY + 2) / 0.77F),
+                        descColor
+                );
+                GlStateManager.popMatrix();
+                offsetY += 14;
+            } else {
+                offsetY += 5;
+            }
         }
     }
 
     //Save settings on gui close
     @Override
     public void onGuiClosed() {
-        SettingsManager.save();
+        SettingsManager.save(FeatureSettings.getFeatureSettings(), featureFile);
         super.onGuiClosed();
     }
 }

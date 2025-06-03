@@ -1,8 +1,6 @@
-package com.SkyRats.Core.Features;
+package com.SkyRats.Core.Features.Mineshafts;
 
 import net.minecraft.util.EnumChatFormatting;
-
-import java.util.EnumSet;
 
 //All ShaftTypes and their respected color
 public enum ShaftTypes {

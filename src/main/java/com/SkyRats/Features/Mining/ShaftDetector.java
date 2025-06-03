@@ -1,9 +1,9 @@
 package com.SkyRats.Features.Mining;
 
-import com.SkyRats.Core.Features.MineshaftTracker;
+import com.SkyRats.Core.Features.Mineshafts.MineshaftTracker;
 import com.SkyRats.Core.Features.PlayerLocationChecker;
-import com.SkyRats.Core.Features.SettingsManager;
-import com.SkyRats.Core.Features.ShaftTypes;
+import com.SkyRats.Core.GUI.FeatureSettings;
+import com.SkyRats.Core.Features.Mineshafts.ShaftTypes;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
@@ -17,6 +17,7 @@ public class ShaftDetector {
     private boolean checked = false;
     private boolean wasInShaft = false;
     private boolean typeSent = false;
+    private int incrementJasp = 0;
     private int tickCooldown = 0;
     private static final int COOLDOWN_TIME = 35;
 
@@ -68,7 +69,8 @@ public class ShaftDetector {
             checked = true;
             //Combine color code + string then reset formatting for next
             String colorName = detectedType.getColor() + detectedType.name() + EnumChatFormatting.RESET;
-            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "[SR ShaftDetection] Detected: " + colorName));
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "[SR ShaftDetection] Detected: "
+                    + colorName));
             typeSent = true;
         }
     }
@@ -78,46 +80,74 @@ public class ShaftDetector {
         int meta = block.getMetaFromState(state);
         // Maps gemstone blocks to ShaftTypes here
         if(block == Blocks.gold_block) {
+            tracker.incrementSinceJasper();
             return ShaftTypes.VANGUARD;
         }else if(block == Blocks.stone) {
             //Polished Diorite
             if(meta == 4) {
+                tracker.incrementSinceJasper();
                 return ShaftTypes.TITANIUM;
             }
         }else if(block == Blocks.clay) {
+            tracker.incrementSinceJasper();
             return ShaftTypes.TUNGSTEN;
         }else if(block == Blocks.stained_hardened_clay) {
             //Orange Terracotta
             if(meta == 1) {
+                tracker.incrementSinceJasper();
                 return ShaftTypes.UMBER;
             }
         }else if(block == Blocks.stained_glass) {
             //Gets the glass color
             switch(meta) {
                 //White -> Opal
-                case 0: return ShaftTypes.OPAL;
+                case 0:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.OPAL;
                 //Orange -> Amber
-                case 1: return ShaftTypes.AMBER;
+                case 1:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.AMBER;
                 //Magenta -> Jasper
-                case 2: return ShaftTypes.JASPER;
+                case 2:
+                    tracker.resetSinceJasper();
+                    return ShaftTypes.JASPER;
                 //Light blue -> Sapphire
-                case 3: return ShaftTypes.SAPPHIRE;
+                case 3:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.SAPPHIRE;
                 //Yellow -> Topaz
-                case 4: return ShaftTypes.TOPAZ;
+                case 4:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.TOPAZ;
                 //Lime -> Jade
-                case 5: return ShaftTypes.JADE;
+                case 5:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.JADE;
                 //Purple -> Amethyst
-                case 10: return ShaftTypes.AMETHYST;
+                case 10:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.AMETHYST;
                 //Blue -> Aquamarine
-                case 11: return ShaftTypes.AQUAMARINE;
+                case 11:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.AQUAMARINE;
                 //Brown -> Citrine
-                case 12: return ShaftTypes.CITRINE;
+                case 12:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.CITRINE;
                 //Green -> Peridot
-                case 13: return ShaftTypes.PERIDOT;
+                case 13:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.PERIDOT;
                 //Red -> Ruby
-                case 14: return ShaftTypes.RUBY;
+                case 14:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.RUBY;
                 //Black -> Onyx
-                case 15: return ShaftTypes.ONYX;
+                case 15:
+                    tracker.incrementSinceJasper();
+                    return ShaftTypes.ONYX;
             }
         }
         return null;
@@ -138,7 +168,7 @@ public class ShaftDetector {
         tickCooldown = COOLDOWN_TIME;
 
         //Checks if Mineshaft Tracker feature is turned on.
-        if(!SettingsManager.isFeatureEnabled("Mining", "Mineshaft Tracker")) return;
+        if(!FeatureSettings.isFeatureEnabled("Mining", "Mineshaft Tracker")) return;
         //Get player's skyblock location
         String location = PlayerLocationChecker.getLocation();
         if(location.equalsIgnoreCase("N/A")) return;
@@ -157,6 +187,14 @@ public class ShaftDetector {
         wasInShaft = isInShaft;
 
         //Additional condition to prevent double check if server lags/location flickering while inside Mineshaft
-        if((location.equalsIgnoreCase("Glacite Tunnels") || location.equalsIgnoreCase("Dwarven Base Camp")) && typeSent) typeSent = false;
+        if((location.equalsIgnoreCase("Glacite Tunnels") || location.equalsIgnoreCase("Dwarven Base Camp")) && typeSent) {
+            typeSent = false;
+            //If player didn't get Jasper in 20 and increment of 20 after mineshafts, make fun of them :)
+            if(tracker.getSinceJasper() == (incrementJasp + 20)) {
+                Minecraft.getMinecraft().thePlayer.playSound("anvil_land", 1.0F, 1.0F);
+                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("You didn't get a "
+                        + EnumChatFormatting.LIGHT_PURPLE + "Jasper" + " in " + tracker.getSinceJasper() + " mineshafts LOL! 🫡"));
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@ package com.SkyRats.Core.Commands;
 import com.SkyRats.Commands.LocationCommand;
 import com.SkyRats.Commands.MenuCommand;
 import com.SkyRats.Commands.ShaftCommand;
-import com.SkyRats.Core.Features.MineshaftTracker;
+import com.SkyRats.Core.Features.Mineshafts.MineshaftTracker;
 
 //Registers all custom commands.
 public class CommandRegisterAll {
