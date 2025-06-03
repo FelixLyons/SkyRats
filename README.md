@@ -17,6 +17,8 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 
 - **Mining Ability Notification**  
   Alerts the player when their mining ability is ready to be used.
+- **Mining Ability Switch Notification**
+  Alerts the player to switch back to Pickobulus after exiting a mineshaft.
 
 *More coming soon...*
 </details>
