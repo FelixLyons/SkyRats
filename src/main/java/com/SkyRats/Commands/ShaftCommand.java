@@ -50,11 +50,11 @@ public class ShaftCommand implements CommandExecution {
         }
 
         //Total shafts
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Total: "
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "\nTotal: "
                 + EnumChatFormatting.GREEN + mineshaftTracker.getTotalShafts()));
 
         //Time since last Jasper shaft
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GRAY + "Mineshafts since last "
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.DARK_GRAY + "Mineshafts since last "
                 + EnumChatFormatting.LIGHT_PURPLE + "JASPER" + EnumChatFormatting.RESET + ": " + EnumChatFormatting.RED + mineshaftTracker.getSinceJasper()));
     }
 }

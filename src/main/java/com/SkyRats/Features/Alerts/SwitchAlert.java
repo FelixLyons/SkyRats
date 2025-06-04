@@ -40,7 +40,7 @@ public class SwitchAlert {
 
             alert.display("SWITCH", 3000);
             ChatUtils.sendClickableMessage("Reminder to switch pickaxe ability!", EnumChatFormatting.AQUA,
-                    "OPEN HOTM", EnumChatFormatting.DARK_GREEN, "/hotm", "Runs /hotm");
+                    " OPEN HOTM", EnumChatFormatting.DARK_GREEN, "/hotm", "Runs /hotm");
             Minecraft.getMinecraft().thePlayer.playSound("random.anvil_land", 2.0F, 1.0F);
             enteredShaft = false;
         }
