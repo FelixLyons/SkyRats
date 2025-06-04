@@ -29,6 +29,6 @@ public class ChatUtils {
         srPrefix.appendSibling(message);
         srPrefix.appendSibling(clickable);
 
-        Minecraft.getMinecraft().thePlayer.addChatMessage(message);
+        Minecraft.getMinecraft().thePlayer.addChatMessage(srPrefix);
     }
 }

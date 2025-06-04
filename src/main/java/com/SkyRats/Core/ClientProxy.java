@@ -3,6 +3,7 @@ package com.SkyRats.Core;
 import com.SkyRats.Core.Commands.CommandKeyInput;
 import com.SkyRats.Core.Commands.CommandRegisterAll;
 import com.SkyRats.Core.Features.Notifications.AlertMessagePopup;
+import com.SkyRats.Core.GUI.FeatureSettings;
 import com.SkyRats.Core.GUI.SettingsManager;
 import com.SkyRats.Features.Alerts.ChatManager;
 import com.SkyRats.Core.Features.Mineshafts.MineshaftTracker;
@@ -19,6 +20,8 @@ public class ClientProxy  {
     );
 
     public void init() {
+        // Load and initialize settings
+        FeatureSettings.run();
         //Register commands
         commands.execute();
         //User chat binds setup

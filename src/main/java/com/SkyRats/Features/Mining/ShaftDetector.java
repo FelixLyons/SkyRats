@@ -17,7 +17,7 @@ public class ShaftDetector {
     private boolean checked = false;
     private boolean wasInShaft = false;
     private boolean typeSent = false;
-    private int incrementJasp = 0;
+    private int incrementJasp = 70;
     private int tickCooldown = 0;
     private static final int COOLDOWN_TIME = 35;
 
@@ -71,6 +71,7 @@ public class ShaftDetector {
             String colorName = detectedType.getColor() + detectedType.name() + EnumChatFormatting.RESET;
             Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "[SR ShaftDetection] Detected: "
                     + colorName));
+            Minecraft.getMinecraft().thePlayer.playSound("random.levelup", 2.0F, 1.0F);
             typeSent = true;
         }
     }
@@ -92,12 +93,12 @@ public class ShaftDetector {
             tracker.incrementSinceJasper();
             return ShaftTypes.TUNGSTEN;
         }else if(block == Blocks.stained_hardened_clay) {
-            //Orange Terracotta
-            if(meta == 1) {
+            //Brown Terracotta
+            if(meta == 12) {
                 tracker.incrementSinceJasper();
                 return ShaftTypes.UMBER;
             }
-        }else if(block == Blocks.stained_glass) {
+        }else if(block == Blocks.stained_glass || block == Blocks.stained_glass_pane) {
             //Gets the glass color
             switch(meta) {
                 //White -> Opal
@@ -181,7 +182,6 @@ public class ShaftDetector {
 
         if(isInShaft && !checked) {
             detectGemstones();
-            Minecraft.getMinecraft().thePlayer.playSound("random_orb", 1.0F, 1.0F); //Play xp orb sound after detect
         }
 
         wasInShaft = isInShaft;
@@ -189,11 +189,26 @@ public class ShaftDetector {
         //Additional condition to prevent double check if server lags/location flickering while inside Mineshaft
         if((location.equalsIgnoreCase("Glacite Tunnels") || location.equalsIgnoreCase("Dwarven Base Camp")) && typeSent) {
             typeSent = false;
-            //If player didn't get Jasper in 20 and increment of 20 after mineshafts, make fun of them :)
-            if(tracker.getSinceJasper() == (incrementJasp + 20)) {
-                Minecraft.getMinecraft().thePlayer.playSound("anvil_land", 1.0F, 1.0F);
+            //If player didn't get Jasper in certain amount of mineshafts, make fun of them and give them the odds of that happens :)
+            if(tracker.getSinceJasper() == 40) {
+                Minecraft.getMinecraft().thePlayer.playSound("mob.villager.death", 2.0F, 1.0F);
                 Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("You didn't get a "
-                        + EnumChatFormatting.LIGHT_PURPLE + "Jasper" + " in " + tracker.getSinceJasper() + " mineshafts LOL! 🫡"));
+                        + EnumChatFormatting.LIGHT_PURPLE + "Jasper" + EnumChatFormatting.RESET + " in " + tracker.getSinceJasper() +
+                        " mineshafts! That's ~ " + EnumChatFormatting.DARK_RED + "7.6%" + EnumChatFormatting.RESET +
+                        "YIKES!"));
+            }else if(tracker.getSinceJasper() == 72) {
+                Minecraft.getMinecraft().thePlayer.playSound("mob.villager.death", 2.0F, 1.0F);
+                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("You didn't get a "
+                        + EnumChatFormatting.LIGHT_PURPLE + "Jasper" + EnumChatFormatting.RESET + " in " + tracker.getSinceJasper() +
+                        " mineshafts! That's ~ " + EnumChatFormatting.DARK_RED + "1%" + EnumChatFormatting.RESET +
+                        "YIKES!"));
+            }else if(tracker.getSinceJasper() >= (incrementJasp + 30)) {
+                incrementJasp += 30;
+                Minecraft.getMinecraft().thePlayer.playSound("mob.villager.death", 2.0F, 1.0F);
+                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("You didn't get a "
+                        + EnumChatFormatting.LIGHT_PURPLE + "Jasper" + EnumChatFormatting.RESET + " in " + tracker.getSinceJasper() +
+                        " mineshafts! That's less than or equal to " + EnumChatFormatting.DARK_RED + "0.26%" + EnumChatFormatting.RESET +
+                        " or in fact theoretically impossible! Keep mining bucko."));
             }
         }
     }

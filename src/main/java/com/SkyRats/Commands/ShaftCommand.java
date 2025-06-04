@@ -19,7 +19,10 @@ public class ShaftCommand implements CommandExecution {
 
     @Override
     public void execute() {
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Shaft Data:"));
+        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD +
+                "" + EnumChatFormatting.UNDERLINE +
+                "" + EnumChatFormatting.BOLD +
+                "Mineshaft Data:\n"));
 
         List<Map.Entry<ShaftTypes, Integer>> entries = new ArrayList<Map.Entry<ShaftTypes, Integer>>();
 

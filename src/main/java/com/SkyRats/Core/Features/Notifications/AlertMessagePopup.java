@@ -3,6 +3,7 @@ package com.SkyRats.Core.Features.Notifications;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -35,7 +36,11 @@ public class AlertMessagePopup {
             //Shows scaled text on screen
             GlStateManager.pushMatrix();
             GlStateManager.scale(scale, scale, scale);
-            Minecraft.getMinecraft().fontRendererObj.drawString(msg, Math.round(x), Math.round(y), 0xFFFFC0CB);
+            Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(EnumChatFormatting.DARK_AQUA + msg,
+                    Math.round(x),
+                    Math.round(y),
+                    0);
+
             GlStateManager.popMatrix();
         }
     }

@@ -27,9 +27,13 @@ public class PlayerLocationChecker {
         for (int offset = 0; offset < length; ) {
             int codePoint = input.codePointAt(offset);
 
-            // Only keep code points inside BMP (<= 0xFFFF)
-            if (codePoint <= 0xFFFF) {
-                sb.append((char) codePoint);
+            // Filter: allow letters, digits, space, basic punctuation; remove everything else including emojis/symbols
+            if (
+                    Character.isLetterOrDigit(codePoint) ||
+                            Character.isSpaceChar(codePoint) ||
+                            codePoint == '.' || codePoint == ',' || codePoint == '!' || codePoint == '?' || codePoint == '\'' || codePoint == '-'
+            ) {
+                sb.appendCodePoint(codePoint);
             }
 
             offset += Character.charCount(codePoint);

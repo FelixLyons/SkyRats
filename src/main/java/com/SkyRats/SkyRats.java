@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 public class SkyRats
 {
     public static final String MODID = "skyrats";
-    public static final String VERSION = "1.0.2";
+    public static final String VERSION = "1.0.3";
 
     //Client Proxy. All client-sided related stuff will run on this proxy.
     public static ClientProxy proxy = new ClientProxy();

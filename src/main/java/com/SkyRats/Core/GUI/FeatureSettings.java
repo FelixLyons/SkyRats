@@ -31,7 +31,7 @@ public class FeatureSettings {
 
         register("Alerts", Arrays.asList(
                 setting("Mining Ability Cooldown Notification", "Alerts you when your ability is off cooldown", false),
-                setting("Reminder to Switch Ability Notification", "Alerts you to switch back to Pickobulus after leaving minable mineshaft", false)
+                setting("Reminder to Switch Ability Notification", "Alerts you to switch ability if you switched after leaving mineshaft", false)
         ));
     }
 
