@@ -23,7 +23,7 @@ public class CommandKeyInput {
             Minecraft.getMinecraft().displayGuiScreen(new BaseCommand("/"));
         }else if(chatKey.isPressed()) {
             //Normal chat (clear)
-            Minecraft.getMinecraft().displayGuiScreen(new BaseCommand(" "));
+            Minecraft.getMinecraft().displayGuiScreen(new BaseCommand(""));
         }
     }
 }

@@ -14,6 +14,7 @@ public class BaseCommand extends GuiChat {
         super(defaultInputText);
     }
 
+    //Checks player chat message for command
     @Override
     public void sendChatMessage(String message) {
         //Intercept message from being sent and execute command if valid.
