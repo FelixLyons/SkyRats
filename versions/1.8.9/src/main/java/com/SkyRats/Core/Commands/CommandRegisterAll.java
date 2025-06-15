@@ -3,6 +3,7 @@ package com.SkyRats.Core.Commands;
 import com.SkyRats.Commands.LocationCommand;
 import com.SkyRats.Commands.MenuCommand;
 import com.SkyRats.Commands.ShaftCommand;
+import com.SkyRats.Commands.SplitOrStealTime;
 import com.SkyRats.Core.Features.Mineshafts.MineshaftTracker;
 
 //Registers all custom commands.
@@ -17,5 +18,6 @@ public class CommandRegisterAll {
         CommandList.register("sr", new MenuCommand());
         CommandList.register("sr shafts", new ShaftCommand(mineshaftTracker));
         CommandList.register("sr wmi", new LocationCommand());
+        CommandList.register("sr sos", new SplitOrStealTime());
     }
 }

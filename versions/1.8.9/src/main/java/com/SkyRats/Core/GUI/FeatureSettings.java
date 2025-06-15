@@ -1,11 +1,12 @@
 package com.SkyRats.Core.GUI;
 
+import net.minecraft.client.Minecraft;
+
 import java.io.File;
 import java.util.*;
 
 public class FeatureSettings {
-    private static final String SETTINGS_FILE_PATH = "SkyRats/settings.json";
-    private static final File SETTINGS_FILE = new File(SETTINGS_FILE_PATH);
+    private static final File SETTINGS_FILE = new File(Minecraft.getMinecraft().mcDataDir, "SkyRats/settings.json");
 
     private static final Map<String, List<Settings>> featureSettings = new HashMap<String, List<Settings>>();
 
@@ -32,6 +33,10 @@ public class FeatureSettings {
         register("Alerts", Arrays.asList(
                 setting("Mining Ability Cooldown Notification", "Alerts you when your ability is off cooldown", false),
                 setting("Reminder to Switch Ability Notification", "Alerts you to switch ability if you switched after leaving mineshaft", false)
+        ));
+
+        register("Rift", Arrays.asList(
+                setting("Split or Steal Tracker", "Tracks the cooldown of Split or Steal", false)
         ));
     }
 

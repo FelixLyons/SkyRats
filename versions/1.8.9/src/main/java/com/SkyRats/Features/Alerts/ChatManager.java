@@ -2,6 +2,7 @@ package com.SkyRats.Features.Alerts;
 
 import com.SkyRats.Core.Features.Notifications.AlertMessagePopup;
 import com.SkyRats.Core.GUI.FeatureSettings;
+import com.SkyRats.Features.Rift.StealOrSplitTracker;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -22,6 +23,11 @@ public class ChatManager {
 
         if(FeatureSettings.isFeatureEnabled("Alerts", "Reminder to Switch Ability Notification")) {
             SwitchAlert.check(msg, alertMessagePopup);
+        }
+
+        if(FeatureSettings.isFeatureEnabled("Rift", "Tracks cooldown for Split or Steal")) {
+            StealOrSplitTracker.check(msg);
+            StealOrSplitTracker.checkAlrCD(msg);
         }
     }
 

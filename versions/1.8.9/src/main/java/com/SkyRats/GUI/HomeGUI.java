@@ -4,6 +4,7 @@ import com.SkyRats.Core.Features.ColorAnimations;
 import com.SkyRats.Core.GUI.FeatureSettings;
 import com.SkyRats.Core.GUI.Settings;
 import com.SkyRats.Core.GUI.SettingsManager;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.EnumChatFormatting;
@@ -115,6 +116,7 @@ public class HomeGUI extends GuiScreen {
                 for (Settings toggle : toggles) {
                     if (toggle.isHovered(mouseX, mouseY)) {
                         toggle.toggle();
+                        Minecraft.getMinecraft().thePlayer.playSound("gui.button.press", 0.8F, 1.0F);
                         return;
                     }
                 }
