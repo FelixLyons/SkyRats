@@ -180,7 +180,7 @@ public class ShaftDetector {
             checked = false;
         }
 
-        if(isInShaft && !checked) {
+        if(isInShaft && !checked && !typeSent) {
             detectGemstones();
         }
 

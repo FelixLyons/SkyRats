@@ -2,12 +2,15 @@ package com.SkyRats.Features.Rift;
 
 import com.SkyRats.Core.Features.TimerTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 
 public class StealOrSplitTracker {
     private static boolean isActive = false;
+    private boolean msgSent = false;
 
     public static void check(String msg) {
         if(msg.startsWith("Your opponent earned") && msg.endsWith("!")) {
@@ -62,6 +65,7 @@ public class StealOrSplitTracker {
         if(isActive) {
             if(!TimerTracker.isCooldownActive("SplitOrSteal")) {
                 TimerTracker.startCooldown("SplitOrSteal", 7200);
+                msgSent = false;
             }
         } else {
             return;
@@ -70,6 +74,12 @@ public class StealOrSplitTracker {
         if(TimerTracker.getCooldownTimeLeft("SplitOrSteal") == 0) {
             isActive = false;
             TimerTracker.clearCooldown("SplitOrSteal");
+            if(!msgSent) {
+                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + "" +
+                        EnumChatFormatting.RED + "[SR] " + EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +
+                        "Split or Steal is available!"));
+                msgSent = true;
+            }
         }
 
         TimerTracker.save();
