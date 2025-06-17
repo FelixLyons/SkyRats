@@ -23,7 +23,6 @@ public class HUDRenderer {
 
         // Only render if feature is turned on
         if(FeatureSettings.isFeatureEnabled("HUD","Mineshaft Tracker HUD")) {
-            shaftDisplay.render(Minecraft.getMinecraft());
             // Only render if player is in certain location
             if(PlayerLocationChecker.getLocation().equalsIgnoreCase("Glacite Tunnels")
                     || PlayerLocationChecker.getLocation().equalsIgnoreCase("Dwarven Base Camp")

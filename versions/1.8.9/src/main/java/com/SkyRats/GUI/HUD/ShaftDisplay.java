@@ -12,6 +12,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
+// HUD display for Mineshaft Tracker feature, shows counts of different shaft types and totals
 public class ShaftDisplay extends MovableUIs {
     private final MineshaftTracker tracker;
 
@@ -28,6 +29,7 @@ public class ShaftDisplay extends MovableUIs {
     @Override
     public void render(Minecraft mc) {
         if(mc.thePlayer == null || mc.theWorld == null) return;
+        // Only render if HUD feature is enabled
         if(!FeatureSettings.isFeatureEnabled("HUD", "Mineshaft Tracker HUD")) return;
         boolean isEditing = mc.currentScreen instanceof EditGUI;
 
@@ -37,30 +39,35 @@ public class ShaftDisplay extends MovableUIs {
 
         int drawY = 0;
 
+        // Draw the HUD title
         mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.GOLD +
                 "" + EnumChatFormatting.UNDERLINE +
                 "" + EnumChatFormatting.BOLD +
                 "Mineshaft Tracker", 0, drawY, 0xFFFFFF);
         drawY += 12;
 
+        // Collect shaft types and counts
         List<Map.Entry<ShaftTypes, Integer>> entries = new ArrayList<Map.Entry<ShaftTypes, Integer>>();
         for(ShaftTypes type : ShaftTypes.values()) {
             int count = tracker.getCount(type);
+            // Show all types if editing (even count = 0), or only those with count > 0 otherwise
             if(isEditing || count > 0) {
                 entries.add(new AbstractMap.SimpleEntry<ShaftTypes, Integer>(type, count));
             }
         }
 
+        // Sort entries by count descending, then by name ascending
         Collections.sort(entries, new Comparator<Map.Entry<ShaftTypes, Integer>>() {
             public int compare(Map.Entry<ShaftTypes, Integer> a, Map.Entry<ShaftTypes, Integer> b) {
-                int cmp = b.getValue() - a.getValue();
+                int cmp = b.getValue() - a.getValue(); // Descending count
                 if(cmp != 0) {
                     return cmp;
                 }
-                return a.getKey().name().compareTo(b.getKey().name());
+                return a.getKey().name().compareTo(b.getKey().name()); // Ascending name
             }
         });
 
+        // Draw each shaft type and its count with color formatting
         for(Map.Entry<ShaftTypes, Integer> entry : entries) {
             ShaftTypes type = entry.getKey();
             int count = entry.getValue();
@@ -84,8 +91,9 @@ public class ShaftDisplay extends MovableUIs {
 
         GL11.glPopMatrix();
 
+        // If in editing mode (HUD Editor GUI), draw a border (hitbox) around the HUD
         if(isEditing) {
-            int borderColor = 0xFF00BFFF;
+            int borderColor = 0xFF00BFFF; //light blue
             int padding = 3;
 
             Gui.drawRect(x - padding, y - padding, x + getScaledWidth() + padding, y - padding + 1, borderColor); // Top

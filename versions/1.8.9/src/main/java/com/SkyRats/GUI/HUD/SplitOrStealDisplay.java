@@ -19,12 +19,14 @@ public class SplitOrStealDisplay extends MovableUIs {
     @Override
     public void render(Minecraft mc) {
         if(mc.thePlayer == null || mc.theWorld == null) return;
+        // Only render if the feature is enabled
         if(!FeatureSettings.isFeatureEnabled("HUD", "Split or Steal HUD")) return;
         boolean isEditing = mc.currentScreen instanceof EditGUI;
 
         String text;
-        int seconds = TimerTracker.getCooldownTimeLeft("SplitOrSteal");
+        int seconds = TimerTracker.getCooldownTimeLeft("Split_Or_Steal");
 
+        // Format text differently based on cooldown availability
         if(seconds <= 0) {
             text = EnumChatFormatting.GREEN + "Split Or Steal: Available";
         } else {
@@ -49,9 +51,9 @@ public class SplitOrStealDisplay extends MovableUIs {
         // Draw the text at (0, 0)
         mc.fontRendererObj.drawStringWithShadow(text, 0, 0, 0xFFFFFF);
 
+        // If editing mode (HUD editor GUI), draw a border (hitbox) around the HUD element
         if(isEditing) {
             int borderColor = 0xFF00BFFF; // Light Blue
-
             int padding = 2;
 
             // Draw borders scaled

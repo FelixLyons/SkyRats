@@ -12,12 +12,14 @@ public class StealOrSplitTracker {
     private static boolean isActive = false;
     private boolean msgSent = false;
 
+    // Check for Split or Steal start
     public static void check(String msg) {
         if(msg.startsWith("ROUND 1:") && msg.endsWith("!")) {
             isActive = true;
         }
     }
 
+    // Sync time if user right click while it's already on cooldown
     public static void checkAlrCD(String msg) {
         if(msg.startsWith("SPLIT! You need to wait")) {
             int totalSec = parseCooldownTime(msg);
@@ -62,6 +64,7 @@ public class StealOrSplitTracker {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if(Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
 
+        // Start Split or Steal time if not active
         if(isActive) {
             if(!TimerTracker.isCooldownActive("Split_Or_Steal")) {
                 TimerTracker.startCooldown("Split_Or_Steal", 7200);
@@ -71,9 +74,11 @@ public class StealOrSplitTracker {
             return;
         }
 
+        // Reset timer if it reaches 0
         if(TimerTracker.getCooldownTimeLeft("Split_Or_Steal") == 0) {
             isActive = false;
             TimerTracker.clearCooldown("Split_Or_Steal");
+            // Alerts user in chat that Split or Steal is ready to use
             if(!msgSent) {
                 Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + "" +
                         EnumChatFormatting.RED + "[SR] " + EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +

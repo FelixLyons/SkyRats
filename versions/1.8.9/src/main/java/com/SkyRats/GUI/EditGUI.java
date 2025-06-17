@@ -31,12 +31,13 @@ public class EditGUI extends GuiScreen {
         // Instructions
         String[] instrLines = new String[]{
                 "Scroll Wheel to resize",
-                "Right click to reset to default",
+                "Right click to reset size to default",
                 "Backspace disable hovered HUD"
         };
 
         posY += 12; // space below title
 
+        // Draw each instruction centered under the title
         for(String line : instrLines) {
             int lineWidth = mc.fontRendererObj.getStringWidth(line);
             mc.fontRendererObj.drawStringWithShadow(line, centerX - (lineWidth / 2), posY, 0xAAAAAA);
@@ -71,8 +72,9 @@ public class EditGUI extends GuiScreen {
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         List<MovableUIs> huds = HUDManager.getAllHUDs();
+        // Pass click event to each HUD for drag
         for(MovableUIs hud : huds) {
-            hud.mouseReleased();
+            hud.mouseReleased(); // mouse release
         }
         super.mouseReleased(mouseX, mouseY, state);
     }
@@ -80,9 +82,11 @@ public class EditGUI extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if(keyCode == 14) { // Backspace key
+            // Convert raw mouse position to GUI coordinates
             int mouseX = Mouse.getX() * this.width / Minecraft.getMinecraft().displayWidth;
             int mouseY = this.height - Mouse.getY() * this.height / Minecraft.getMinecraft().displayHeight - 1;
 
+            // Loop through HUDs and disable the hovered one if backspace is pressed on it
             for(MovableUIs hud : HUDManager.getAllHUDs()) {
                 if(hud.isHovered(mouseX, mouseY)) {
                     String label = hud.getFeatureLabel();
@@ -91,7 +95,7 @@ public class EditGUI extends GuiScreen {
                         if(hudSettings != null) {
                             for(Settings setting : hudSettings) {
                                 if(setting.getLabel().equalsIgnoreCase(label)) {
-                                    setting.setValue(false);
+                                    setting.setValue(false); // disables the feature
                                     // Saving disabled feature
                                     File configFile = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
                                     SettingsManager.save(FeatureSettings.getFeatureSettings(), configFile);
@@ -129,15 +133,19 @@ public class EditGUI extends GuiScreen {
         super.onGuiClosed();
     }
 
+    // Handles mouse wheel input (resize HUD)
     @Override
     public void handleMouseInput() throws IOException {
         super.handleMouseInput();
 
+        // Get scroll amount
         int scroll = org.lwjgl.input.Mouse.getEventDWheel();
         if(scroll != 0) {
+            // Get actual mouse position in screen space
             int mouseX = org.lwjgl.input.Mouse.getEventX() * this.width / this.mc.displayWidth;
             int mouseY = this.height - org.lwjgl.input.Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 
+            // Find the hovered HUD and adjust its size (scale)
             for(MovableUIs hud : HUDManager.getAllHUDs()) {
                 if (hud.isHovered(mouseX, mouseY)) {
                     float currentScale = hud.getScale();
