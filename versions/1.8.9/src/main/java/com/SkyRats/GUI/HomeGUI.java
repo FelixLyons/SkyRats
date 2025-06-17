@@ -201,6 +201,54 @@ public class HomeGUI extends GuiScreen {
                 toggle.setX(x);
                 toggle.setY(offsetY);
 
+                if(toggle.getLabel().equalsIgnoreCase("Mineshaft Tracker HUD") && toggle.getValue()) {
+                    boolean isTrackerOn = FeatureSettings.isFeatureEnabled("Mining", "Mineshaft Tracker");
+                    if (!isTrackerOn) {
+                        List<Settings> miningToggles = FeatureSettings.getFeatureSettings().get("Mining");
+                        if (miningToggles != null) {
+                            for (Settings miningToggle : miningToggles) {
+                                if (miningToggle.getLabel().equalsIgnoreCase("Mineshaft Tracker")) {
+                                    miningToggle.setValue(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if(toggle.getLabel().equalsIgnoreCase("Mineshaft Tracker") && !toggle.getValue()) {
+                    List<Settings> hudToggles = FeatureSettings.getFeatureSettings().get("HUD");
+                    if (hudToggles != null) {
+                        for (Settings hudToggle : hudToggles) {
+                            if (hudToggle.getLabel().equalsIgnoreCase("Mineshaft Tracker HUD")) {
+                                hudToggle.setValue(false);
+                                break;
+                            }
+                        }
+                    }
+                } else if(toggle.getLabel().equalsIgnoreCase("Split or Steal HUD") && toggle.getValue()) {
+                    boolean isTrackerOn = FeatureSettings.isFeatureEnabled("Rift", "Split or Steal Tracker");
+                    if (!isTrackerOn) {
+                        List<Settings> riftToggles = FeatureSettings.getFeatureSettings().get("Rift");
+                        if (riftToggles != null) {
+                            for (Settings miningToggle : riftToggles) {
+                                if (miningToggle.getLabel().equalsIgnoreCase("Split or Steal Tracker")) {
+                                    miningToggle.setValue(true);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if(toggle.getLabel().equalsIgnoreCase("Split or Steal Tracker") && !toggle.getValue()) {
+                    List<Settings> hudToggles = FeatureSettings.getFeatureSettings().get("HUD");
+                    if (hudToggles != null) {
+                        for (Settings hudToggle : hudToggles) {
+                            if (hudToggle.getLabel().equalsIgnoreCase("Split or Steal HUD")) {
+                                hudToggle.setValue(false);
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 // Draw label with blue if ON, dark gray if OFF
                 int labelColor = toggle.getValue() ? 0xFF3F76E4 : 0xFF555555; // blue if on or gray if off
                 fontRendererObj.drawString(toggle.getLabel(), x, offsetY + 4, labelColor);

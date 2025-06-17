@@ -7,6 +7,7 @@ import com.SkyRats.Core.GUI.MovableUIs;
 import com.SkyRats.GUI.EditGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.util.EnumChatFormatting;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
@@ -20,7 +21,7 @@ public class ShaftDisplay extends MovableUIs {
         this.setFeatureLabel("Mineshaft Tracker HUD");
 
         // Default HUD size
-        this.width = 100;
+        this.width = 120;
         this.height = 195;
     }
 
@@ -36,7 +37,10 @@ public class ShaftDisplay extends MovableUIs {
 
         int drawY = 0;
 
-        mc.fontRendererObj.drawStringWithShadow("§l§6Mineshaft Tracker", 0, drawY, 0xFFFFFF);
+        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.GOLD +
+                "" + EnumChatFormatting.UNDERLINE +
+                "" + EnumChatFormatting.BOLD +
+                "Mineshaft Tracker", 0, drawY, 0xFFFFFF);
         drawY += 12;
 
         List<Map.Entry<ShaftTypes, Integer>> entries = new ArrayList<Map.Entry<ShaftTypes, Integer>>();
@@ -60,10 +64,8 @@ public class ShaftDisplay extends MovableUIs {
         for(Map.Entry<ShaftTypes, Integer> entry : entries) {
             ShaftTypes type = entry.getKey();
             int count = entry.getValue();
-            String color = (count > 0) ? type.getColor() : "§7";
-
             mc.fontRendererObj.drawStringWithShadow(
-                    color + type.name() + ": §e" + count,
+                    type.getColor() + type.name() + EnumChatFormatting.YELLOW + " " + count,
                     0, drawY,
                     0xFFFFFF
             );
@@ -72,9 +74,13 @@ public class ShaftDisplay extends MovableUIs {
 
         drawY += 4;
 
-        mc.fontRendererObj.drawStringWithShadow("§7Total: §a" + tracker.getTotalShafts(), 0, drawY, 0xFFFFFF);
+        // Total
+        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.GRAY + "Total: " + EnumChatFormatting.GREEN +
+                tracker.getTotalShafts(), 0, drawY, 0xFFFFFF);
         drawY += 10;
-        mc.fontRendererObj.drawStringWithShadow("§7Since §dJASPER§7: §c" + tracker.getSinceJasper(), 0, drawY, 0xFFFFFF);
+        // Total since Jasper
+        mc.fontRendererObj.drawStringWithShadow(EnumChatFormatting.GRAY + "Since " + EnumChatFormatting.LIGHT_PURPLE + "JASPER: " +
+                EnumChatFormatting.RED + tracker.getSinceJasper(), 0, drawY, 0xFFFFFF);
 
         GL11.glPopMatrix();
 
