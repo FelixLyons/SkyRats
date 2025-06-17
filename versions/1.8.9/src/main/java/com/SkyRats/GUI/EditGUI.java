@@ -11,7 +11,7 @@ import java.util.*;
 
 // Edit GUI screen
 public class EditGUI extends GuiScreen {
-    private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/Mineshaft/config.json");
+    private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
 
     // Draw the GUI screen
     @Override

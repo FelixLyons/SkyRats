@@ -63,7 +63,7 @@ public class HUDSettings {
     }
 
     public static void load() {
-        File saveFile = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/Mineshaft/config.json");
+        File saveFile = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
         Map<String, List<HUDSettings>> savedPositions = SettingsManager.load(saveFile, HUDSettings.class);
 
         for (MovableUIs ui : HUDManager.getAllHUDs()) {

@@ -15,6 +15,7 @@ import com.SkyRats.Features.Rift.StealOrSplitTracker;
 import com.SkyRats.GUI.HUD.HUDManager;
 import com.SkyRats.GUI.HUD.HUDRenderer;
 import com.SkyRats.GUI.HUD.ShaftDisplay;
+import com.SkyRats.GUI.HUD.SplitOrStealDisplay;
 import net.minecraftforge.common.MinecraftForge;
 
 public class ClientProxy  {
@@ -23,11 +24,15 @@ public class ClientProxy  {
     private CommandRegisterAll commands = new CommandRegisterAll(
             tracker
     );
+
+    // HUDs Objects
     private ShaftDisplay shaftDisplay = new ShaftDisplay(tracker);
+    private SplitOrStealDisplay sosDisplay = new SplitOrStealDisplay();
 
     public void init() {
         // Register HUDs
         HUDManager.register(shaftDisplay);
+        HUDManager.register(sosDisplay);
 
         // Load and initialize settings
         FeatureSettings.run();
@@ -50,6 +55,8 @@ public class ClientProxy  {
         MinecraftForge.EVENT_BUS.register(new StealOrSplitTracker());
 
         // HUD Renderer
-        MinecraftForge.EVENT_BUS.register(new HUDRenderer(shaftDisplay));
+        MinecraftForge.EVENT_BUS.register(new HUDRenderer(
+                shaftDisplay,
+                sosDisplay));
     }
 }

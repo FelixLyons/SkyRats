@@ -14,7 +14,7 @@ import java.util.List;
 public class HomeGUI extends GuiScreen {
 
     private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
-    private final File HUDFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/Mineshaft/config.json");
+    private final File HUDFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
     private int selectedFeature = 0;
     private final String[] features = {"Home", "Alerts", "Mining", "Rift", "HUD", "Others"};
     private final int leftPanelWidth = 150;

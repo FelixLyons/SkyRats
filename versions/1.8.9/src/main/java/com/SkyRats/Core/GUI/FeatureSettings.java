@@ -40,7 +40,8 @@ public class FeatureSettings {
         ));
 
         register("HUD", Arrays.asList(
-                setting("Mineshaft Tracker HUD", "HUD for Mineshafts", false)
+                setting("Mineshaft Tracker HUD", "Display HUD for Mineshafts", false),
+                new Settings("Split or Steal HUD", "Display time HUD for Split or Steal", false)
         ));
     }
 

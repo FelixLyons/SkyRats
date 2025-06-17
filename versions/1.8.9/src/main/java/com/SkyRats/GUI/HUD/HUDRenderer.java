@@ -9,9 +9,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 // Renders HUD if active
 public class HUDRenderer {
     private final ShaftDisplay shaftDisplay;
+    private final SplitOrStealDisplay sosDisplay;
 
-    public HUDRenderer(ShaftDisplay shaftDisplay) {
+    public HUDRenderer(ShaftDisplay shaftDisplay, SplitOrStealDisplay sosDisplay) {
         this.shaftDisplay = shaftDisplay;
+        this.sosDisplay = sosDisplay;
     }
 
     // Renders the HUD
@@ -21,12 +23,17 @@ public class HUDRenderer {
 
         // Only render if feature is turned on
         if(FeatureSettings.isFeatureEnabled("HUD","Mineshaft Tracker HUD")) {
+            shaftDisplay.render(Minecraft.getMinecraft());
             // Only render if player is in certain location
             if(PlayerLocationChecker.getLocation().equalsIgnoreCase("Glacite Tunnels")
                     || PlayerLocationChecker.getLocation().equalsIgnoreCase("Dwarven Base Camp")
                     || PlayerLocationChecker.getLocation().equalsIgnoreCase("Glacite Mineshafts")) {
                 shaftDisplay.render(Minecraft.getMinecraft());
             }
+        }
+        // Only render if feature is turned on
+        if(FeatureSettings.isFeatureEnabled("HUD","Split or Steal HUD")) {
+            sosDisplay.render(Minecraft.getMinecraft());
         }
     }
 }
