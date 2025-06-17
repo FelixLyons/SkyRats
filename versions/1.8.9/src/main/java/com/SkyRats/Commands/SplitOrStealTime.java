@@ -9,7 +9,7 @@ import net.minecraft.util.EnumChatFormatting;
 public class SplitOrStealTime implements CommandExecution {
     @Override
     public void execute() {
-        int totalTime = TimerTracker.getCooldownTimeLeft("SplitOrSteal");
+        int totalTime = TimerTracker.getCooldownTimeLeft("Split_Or_Steal");
         int hours = totalTime / 3600;
         int minutes = (totalTime % 3600) / 60;
         int seconds = totalTime % 60;
