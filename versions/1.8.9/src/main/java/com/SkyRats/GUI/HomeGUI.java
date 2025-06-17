@@ -1,9 +1,7 @@
 package com.SkyRats.GUI;
 
 import com.SkyRats.Core.Features.ColorAnimations;
-import com.SkyRats.Core.GUI.FeatureSettings;
-import com.SkyRats.Core.GUI.Settings;
-import com.SkyRats.Core.GUI.SettingsManager;
+import com.SkyRats.Core.GUI.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,13 +13,15 @@ import java.util.List;
 
 public class HomeGUI extends GuiScreen {
 
-    private final File featureFile = new File("SkyRats/settings.json");
+    private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
+    private final File HUDFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/Mineshaft/config.json");
     private int selectedFeature = 0;
     private final String[] features = {"Home", "Alerts", "Mining", "Rift", "HUD", "Others"};
     private final int leftPanelWidth = 150;
     private final int rightPanelWidth = 430;
     private final int panelWidth = leftPanelWidth + rightPanelWidth;
     private final int panelHeight = 320;
+    private EditButton editButton;
 
     public HomeGUI() {
         FeatureSettings.run();
@@ -29,9 +29,16 @@ public class HomeGUI extends GuiScreen {
 
     @Override
     public void initGui() {
-
+        this.editButton = new EditButton("Edit", new Runnable() {
+            @Override
+            public void run() {
+                HUDSettings.applyHUDPositions(HUDFILE);
+                GuiOpener.queueGui(new EditGUI());
+            }
+        });
     }
 
+    // Draws /sr menu
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
@@ -109,8 +116,14 @@ public class HomeGUI extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         if (mouseButton == 0) {
-            // Check for toggle interaction
             String featureKey = features[selectedFeature];
+            // Click for Edit Button
+            if (featureKey.equals("Home") && editButton != null && editButton.isHovered(mouseX, mouseY)) {
+                editButton.onClick();
+                return;
+            }
+
+            // Check for toggle interaction
             List<Settings> toggles = FeatureSettings.getFeatureSettings().get(featureKey);
             if (toggles != null) {
                 for (Settings toggle : toggles) {
@@ -147,41 +160,59 @@ public class HomeGUI extends GuiScreen {
                 y,
                 chroma);
 
-        List<Settings> toggles = FeatureSettings.getFeatureSettings().get(features[selectedFeature]);
-        if (toggles == null || toggles.isEmpty()) {
-            drawString(fontRendererObj, "WIP", x, y + 20, 0xAAAAAA);
+        int offsetY = y + 20;
+
+        // Edit GUI Location button
+        if (features[selectedFeature].equals("Home")) {
+            int rowHeight = 14;
+            int rowY = offsetY;
+
+            // Center the label vertically within the row
+            int textY = rowY + (rowHeight - fontRendererObj.FONT_HEIGHT) / 2;
+            fontRendererObj.drawString("Edit HUD Location", x, textY, 0xFF3F76E4);
+
+            // Align button on same row
+            editButton.setPosition(x + 350, rowY);
+            editButton.draw(mc, mouseX, mouseY);
+
             return;
         }
 
-        int offsetY = y + 20;
+        List<Settings> toggles = FeatureSettings.getFeatureSettings().get(features[selectedFeature]);
+        if ((toggles == null || toggles.isEmpty()) && !features[selectedFeature].equals("Home")) {
+            drawString(fontRendererObj, "WIP", x, offsetY, 0xAAAAAA);
+            return;
+        }
 
-        for (Settings toggle : toggles) {
-            toggle.setX(x);
-            toggle.setY(offsetY);
+        if(toggles != null) {
+            for (Settings toggle : toggles) {
+                toggle.setX(x);
+                toggle.setY(offsetY);
 
-            // Draw label with blue if ON, dark gray if OFF
-            int labelColor = toggle.getValue() ? 0xFF3F76E4 : 0xFF555555; // blue if on or gray if off
-            fontRendererObj.drawString(toggle.getLabel(), x, offsetY + 4, labelColor);
-            toggle.draw(mc, mouseX, mouseY);
+                // Draw label with blue if ON, dark gray if OFF
+                int labelColor = toggle.getValue() ? 0xFF3F76E4 : 0xFF555555; // blue if on or gray if off
+                fontRendererObj.drawString(toggle.getLabel(), x, offsetY + 4, labelColor);
+                toggle.draw(mc, mouseX, mouseY);
 
-            String desc = toggle.getDescription();
-            offsetY += toggle.getHeight();
+                String desc = toggle.getDescription();
+                offsetY += toggle.getHeight();
 
-            if (desc != null && !desc.isEmpty()) {
-                // Scaling down text size
-                GlStateManager.pushMatrix();
-                GlStateManager.scale(0.77F, 0.77F, 1.0F);
-                int descColor = toggle.getValue() ? 0xFFFFFFFF : 0xFF555555;  // white if ON, gray if OFF
-                drawString(fontRendererObj,
-                        desc,
-                        (int) ((x + 4) / 0.77F),
-                        (int) ((offsetY + 2) / 0.77F),
-                        descColor
-                );
-                GlStateManager.popMatrix();
-                offsetY += 14;
-            } else {
-                offsetY += 5;
+                if (desc != null && !desc.isEmpty()) {
+                    // Scaling down text size
+                    GlStateManager.pushMatrix();
+                    GlStateManager.scale(0.77F, 0.77F, 1.0F);
+                    int descColor = toggle.getValue() ? 0xFFFFFFFF : 0xFF555555;  // white if ON, gray if OFF
+                    drawString(fontRendererObj,
+                            desc,
+                            (int) ((x + 4) / 0.77F),
+                            (int) ((offsetY + 2) / 0.77F),
+                            descColor
+                    );
+                    GlStateManager.popMatrix();
+                    offsetY += 14;
+                } else {
+                    offsetY += 5;
+                }
             }
         }
     }
@@ -189,7 +220,7 @@ public class HomeGUI extends GuiScreen {
     //Save settings on gui close
     @Override
     public void onGuiClosed() {
-        SettingsManager.save(FeatureSettings.getFeatureSettings(), featureFile);
+        SettingsManager.save(FeatureSettings.getFeatureSettings(), SAVEFILE);
         super.onGuiClosed();
     }
 }

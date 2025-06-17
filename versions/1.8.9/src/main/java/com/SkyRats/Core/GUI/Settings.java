@@ -3,7 +3,7 @@ package com.SkyRats.Core.GUI;
 import com.google.gson.annotations.Expose;
 
 // Renders the feature switch alongside data that is used to save on JSON
-public class Settings implements Config {
+public class Settings  {
     private int x, y, num;
     private final int width = 50;
     private final int height = 14;
@@ -23,23 +23,19 @@ public class Settings implements Config {
     }
 
     // Getters and Setters
-    @Override
     public String getLabel() {
         return label;
     }
 
-    @Override
     public boolean getValue() {
         return value;
     }
 
     //Never used here (useless)
-    @Override
     public int getNum() {
         return num;
     }
 
-    @Override
     public void setValue(boolean value) {
         this.value = value;
     }

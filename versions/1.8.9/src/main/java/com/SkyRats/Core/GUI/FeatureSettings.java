@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.*;
 
 public class FeatureSettings {
-    private static final File SETTINGS_FILE = new File(Minecraft.getMinecraft().mcDataDir, "SkyRats/settings.json");
+    private static final File SETTINGS_FILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
 
     private static final Map<String, List<Settings>> featureSettings = new HashMap<String, List<Settings>>();
 
@@ -37,6 +37,10 @@ public class FeatureSettings {
 
         register("Rift", Arrays.asList(
                 setting("Split or Steal Tracker", "Tracks the cooldown of Split or Steal", false)
+        ));
+
+        register("HUD", Arrays.asList(
+                setting("Mineshaft Tracker HUD", "HUD for Mineshafts", false)
         ));
     }
 

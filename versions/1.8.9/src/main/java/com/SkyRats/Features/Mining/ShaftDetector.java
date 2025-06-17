@@ -19,7 +19,7 @@ public class ShaftDetector {
     private boolean typeSent = false;
     private int incrementJasp = 70;
     private int tickCooldown = 0;
-    private static final int COOLDOWN_TIME = 35;
+    private static final int COOLDOWN_TIME = 20;
 
     public ShaftDetector(MineshaftTracker tracker) {
         this.tracker = tracker;
@@ -32,9 +32,9 @@ public class ShaftDetector {
         Vec3 eyePos = Minecraft.getMinecraft().thePlayer.getPositionEyes(1.0f);
         Vec3 lookVec = Minecraft.getMinecraft().thePlayer.getLook(1.0f);
 
-        final int numRays = 35;          // More rays = wider coverage. Too much will cause lag so beware.
-        final float coneAngle = 1.33f;    // Wider angle (in radians)
-        final double maxDistance = 15.0; // Max block detection distance
+        final int numRays = 40;          // More rays = wider coverage. Too much will cause lag so beware.
+        final float coneAngle = 1.35f;    // Wider angle (in radians)
+        final double maxDistance = 16.0; // Max block detection distance
 
         ShaftTypes detectedType = null;
 
@@ -154,7 +154,7 @@ public class ShaftDetector {
         return null;
     }
 
-    //Check Mineshaft every 35 ticks (3.5 seconds) if player is in Mineshaft
+    //Check Mineshaft every 20 ticks (1 seconds) if player is in Mineshaft
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         //CHeck if player or world is not loaded.

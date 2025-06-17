@@ -25,7 +25,7 @@ public class ChatManager {
             SwitchAlert.check(msg, alertMessagePopup);
         }
 
-        if(FeatureSettings.isFeatureEnabled("Rift", "Tracks cooldown for Split or Steal")) {
+        if(FeatureSettings.isFeatureEnabled("Rift", "Split or Steal Tracker")) {
             StealOrSplitTracker.check(msg);
             StealOrSplitTracker.checkAlrCD(msg);
         }

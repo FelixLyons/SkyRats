@@ -11,7 +11,7 @@ public class MiningAbilityAlert {
             || msg.equalsIgnoreCase("Gemstone Infusion is now available!") || msg.equalsIgnoreCase("Sheer Force is now available!")) {
 
             alert.display("ABILITY", 2000);
-            Minecraft.getMinecraft().thePlayer.playSound("fireworks.twinkle", 1.0F, 1.0F);
+            Minecraft.getMinecraft().thePlayer.playSound("fireworks.launch", 1.0F, 1.0F);
         }
     }
 }
