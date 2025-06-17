@@ -1,27 +1,31 @@
 package com.SkyRats.GUI.HUD;
 
 import com.SkyRats.Core.Features.TimerTracker;
+import com.SkyRats.Core.GUI.FeatureSettings;
 import com.SkyRats.Core.GUI.MovableUIs;
 import com.SkyRats.GUI.EditGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.EnumChatFormatting;
+import org.lwjgl.opengl.GL11;
 
 public class SplitOrStealDisplay extends MovableUIs {
 
     public SplitOrStealDisplay() {
-        super("SplitOrSteal");
+        super("Split Or Steal");
+        this.setFeatureLabel("Split or Steal HUD");
     }
 
     @Override
     public void render(Minecraft mc) {
-        if (mc.thePlayer == null || mc.theWorld == null) return;
+        if(mc.thePlayer == null || mc.theWorld == null) return;
+        if(!FeatureSettings.isFeatureEnabled("HUD", "Split or Steal HUD")) return;
         boolean isEditing = mc.currentScreen instanceof EditGUI;
 
         String text;
         int seconds = TimerTracker.getCooldownTimeLeft("SplitOrSteal");
 
-        if (seconds <= 0) {
+        if(seconds <= 0) {
             text = EnumChatFormatting.GREEN + "Split Or Steal: Available";
         } else {
             int h = seconds / 3600;
@@ -37,19 +41,26 @@ public class SplitOrStealDisplay extends MovableUIs {
         this.width = mc.fontRendererObj.getStringWidth(text) + 4;
         this.height = mc.fontRendererObj.FONT_HEIGHT;
 
-        if (isEditing) {
+        // Scaling
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, 0);
+        GL11.glScalef(scale, scale, 1);
+
+        // Draw the text at (0, 0)
+        mc.fontRendererObj.drawStringWithShadow(text, 0, 0, 0xFFFFFF);
+
+        if(isEditing) {
             int borderColor = 0xFF00BFFF; // Light Blue
 
-            // Top border
-            Gui.drawRect(x - 2, y - 2, x + width + 2, y - 1, borderColor);
-            // Bottom border
-            Gui.drawRect(x - 2, y + height + 1, x + width + 2, y + height + 2, borderColor);
-            // Left border
-            Gui.drawRect(x - 2, y - 2, x - 1, y + height + 2, borderColor);
-            // Right border
-            Gui.drawRect(x + width + 1, y - 2, x + width + 2, y + height + 2, borderColor);
+            int padding = 2;
+
+            // Draw borders scaled
+            Gui.drawRect(-padding, -padding, width + padding, -padding + 1, borderColor); // Top
+            Gui.drawRect(-padding, height + padding - 1, width + padding, height + padding, borderColor); // Bottom
+            Gui.drawRect(-padding, -padding, -padding + 1, height + padding, borderColor); // Left
+            Gui.drawRect(width + padding - 1, -padding, width + padding, height + padding, borderColor); // Right
         }
 
-        mc.fontRendererObj.drawStringWithShadow(text, x, y, 0xFFFFFF);
+        GL11.glPopMatrix();
     }
 }

@@ -35,7 +35,6 @@ public class ShaftCommand implements CommandExecution {
 
         // Sort from highest to lowest
         Collections.sort(entries, new Comparator<Map.Entry<ShaftTypes, Integer>>() {
-            @Override
             public int compare(Map.Entry<ShaftTypes, Integer> a, Map.Entry<ShaftTypes, Integer> b) {
                 return b.getValue() - a.getValue();  // descending order
             }

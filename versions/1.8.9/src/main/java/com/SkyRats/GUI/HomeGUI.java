@@ -2,6 +2,7 @@ package com.SkyRats.GUI;
 
 import com.SkyRats.Core.Features.ColorAnimations;
 import com.SkyRats.Core.GUI.*;
+import com.SkyRats.SkyRats;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,7 +17,7 @@ public class HomeGUI extends GuiScreen {
     private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
     private final File HUDFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
     private int selectedFeature = 0;
-    private final String[] features = {"Home", "Alerts", "Mining", "Rift", "HUD", "Others"};
+    private final String[] features = {"Home", "HUD", "Alerts", "Mining", "Rift", "Others"};
     private final int leftPanelWidth = 150;
     private final int rightPanelWidth = 430;
     private final int panelWidth = leftPanelWidth + rightPanelWidth;
@@ -42,8 +43,9 @@ public class HomeGUI extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        // Chroma Color
+        /* Chroma Color
         int chroma = ColorAnimations.getChromaColor(8f, 0f);
+        */
 
         // Panel sizes
         int panelX = (width - panelWidth) / 2;
@@ -61,7 +63,7 @@ public class HomeGUI extends GuiScreen {
                 EnumChatFormatting.BOLD + "" + EnumChatFormatting.UNDERLINE + "SkyRats",
                 panelX + 10,
                 yPos,
-                chroma);
+                0xFF3F76E4);
         // Making text smaller for creator
         GlStateManager.pushMatrix();
         // Scaled down by 10%
@@ -70,19 +72,19 @@ public class HomeGUI extends GuiScreen {
                 EnumChatFormatting.BOLD + "By Sunaio & A_Blender_",
                 (int) ((panelX + 10) / 0.87F),
                 (int) ((yPos + 14) / 0.87F),
-                chroma
+                0xFF3F76E4
         );
 
         GlStateManager.popMatrix();
 
         // Draw vertical separator line between panels
         int lineX = panelX + leftPanelWidth;
-        drawRect(lineX, panelY, lineX + 1, panelY + panelHeight, chroma);
+        drawRect(lineX, panelY, lineX + 1, panelY + panelHeight, 0xFF3F76E4);
 
         // Draw feature texts on left panel
         startY = panelY + 40;
         for (int i = 0; i < features.length; i++) {
-            yPos = startY + i * 22;
+            yPos = startY + i * 15; // spacing
 
             // Check if mouse is hovering over this feature text
             boolean isHover = mouseX >= panelX + 10
@@ -96,10 +98,10 @@ public class HomeGUI extends GuiScreen {
                 drawString(fontRendererObj,
                         EnumChatFormatting.UNDERLINE + features[i],
                         panelX + 10, yPos,
-                        0x55FFFF);
+                        0xFF3F76E4);
             } else if (isHover) {
                 // light blue on hover
-                drawString(fontRendererObj,features[i], panelX + 10, yPos, 0x55FFFF);
+                drawString(fontRendererObj,features[i], panelX + 10, yPos, 0xFF3F76E4);
             } else {
                 // normal color (white)
                 drawString(fontRendererObj, features[i], panelX + 10, yPos, 0xFFFFFF);
@@ -140,7 +142,7 @@ public class HomeGUI extends GuiScreen {
             int panelY = (height - panelHeight) / 2;
             int startY = panelY + 40;
             for (int i = 0; i < features.length; i++) {
-                int yPos = startY + i * 22;
+                int yPos = startY + i * 15; // spacing (change this if you changed spacing for left panel)
                 if (mouseX >= panelX + 10 && mouseX <= panelX + leftPanelWidth - 10
                         && mouseY >= yPos && mouseY <= yPos + 12) {
                     selectedFeature = i;
@@ -154,16 +156,26 @@ public class HomeGUI extends GuiScreen {
 
     //Right panel of GUI where all settings for selected feature is displayed.
     private void drawRightPanelContent(int x, int y, int mouseX, int mouseY) {
-        int chroma = ColorAnimations.getChromaColor(8f, 0f);
+        //int chroma = ColorAnimations.getChromaColor(8f, 0f);
         drawString(fontRendererObj, EnumChatFormatting.UNDERLINE + "" + EnumChatFormatting.BOLD + features[selectedFeature],
                 x,
                 y,
-                chroma);
+                0xFF3F76E4);
 
-        int offsetY = y + 20;
+        int offsetY = y + 20; // spacing
 
         // Edit GUI Location button
         if (features[selectedFeature].equals("Home")) {
+            // Draw version text
+            fontRendererObj.drawString(
+                    "SkyRats v" + SkyRats.VERSION,
+                    x,
+                    offsetY,
+                    0xFF3F76E4
+            );
+
+            offsetY += 18; // spacing
+
             int rowHeight = 14;
             int rowY = offsetY;
 

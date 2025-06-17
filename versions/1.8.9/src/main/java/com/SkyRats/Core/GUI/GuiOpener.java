@@ -14,7 +14,7 @@ public class GuiOpener {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && guiToOpen != null) {
+        if(event.phase == TickEvent.Phase.END && guiToOpen != null) {
             Minecraft.getMinecraft().displayGuiScreen(guiToOpen);
             guiToOpen = null;
         }

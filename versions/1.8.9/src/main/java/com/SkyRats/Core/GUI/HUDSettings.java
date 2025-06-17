@@ -14,10 +14,21 @@ public class HUDSettings {
 
     @Expose private int x, y;
 
-    public HUDSettings(String id, int x, int y) {
+    @Expose private float scale = 1.0F;
+
+    public HUDSettings(String id, int x, int y, float scale) {
         this.id = id;
         this.x = x;
         this.y = y;
+        this.scale = scale;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public void setScale(float scale) {
+        this.scale = Math.max(0.5F, Math.min(3.0F, scale));
     }
 
     public String getId() {
@@ -45,17 +56,18 @@ public class HUDSettings {
 
         List<MovableUIs> huds = HUDManager.getAllHUDs();
 
-        for (Map.Entry<String, List<HUDSettings>> entry : savedPositions.entrySet()) {
+        for(Map.Entry<String, List<HUDSettings>> entry : savedPositions.entrySet()) {
             String hudName = entry.getKey();
             List<HUDSettings> positions = entry.getValue();
 
-            if (positions == null || positions.isEmpty()) continue;
+            if(positions == null || positions.isEmpty()) continue;
 
-            HUDSettings pos = positions.get(0);  // Get first (and only) element
+            HUDSettings pos = positions.get(0);
 
-            for (MovableUIs hud : huds) {
-                if (hud.getName().equals(hudName)) {
+            for(MovableUIs hud : huds) {
+                if(hud.getName().equals(hudName)) {
                     hud.setPosition(pos.getX(), pos.getY());
+                    hud.setScale(pos.getScale());
                     break;
                 }
             }
@@ -64,14 +76,6 @@ public class HUDSettings {
 
     public static void load() {
         File saveFile = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
-        Map<String, List<HUDSettings>> savedPositions = SettingsManager.load(saveFile, HUDSettings.class);
-
-        for (MovableUIs ui : HUDManager.getAllHUDs()) {
-            List<HUDSettings> settingsList = savedPositions.get(ui.getName());
-            if (settingsList != null && !settingsList.isEmpty()) {
-                HUDSettings settings = settingsList.get(0);
-                ui.setPosition(settings.getX(), settings.getY());
-            }
-        }
+        applyHUDPositions(saveFile);
     }
 }

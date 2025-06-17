@@ -13,7 +13,7 @@ public class FeatureSettings {
     public static void run() {
         // Load previously saved settings into memory
         Map<String, List<Settings>> loaded = SettingsManager.load(SETTINGS_FILE, Settings.class);
-        if (loaded != null) {
+        if(loaded != null) {
             featureSettings.putAll(loaded);
         }
 
@@ -49,11 +49,11 @@ public class FeatureSettings {
     private static void register(String featureName, List<Settings> defaults) {
         List<Settings> existing = featureSettings.get(featureName);
 
-        if (existing == null) {
+        if(existing == null) {
             // No existing settings, just add defaults
             featureSettings.put(featureName, new ArrayList<Settings>(defaults));
         } else {
-            for (Settings def : defaults) {
+            for(Settings def : defaults) {
                 boolean found = false;
                 for (Settings e : existing) {
                     if (e.getLabel().equalsIgnoreCase(def.getLabel())) {
@@ -85,7 +85,7 @@ public class FeatureSettings {
     // Checks if feature is enabled
     public static boolean isFeatureEnabled(String feature, String label) {
         List<Settings> settingsList = featureSettings.get(feature);
-        if (settingsList != null) {
+        if(settingsList != null) {
             for (Settings s : settingsList) {
                 if (s.getLabel().equalsIgnoreCase(label)) {
                     return s.getValue();
