@@ -1,6 +1,6 @@
 # 🐀 SkyRats
 
-SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** experience with useful features and quality-of-life improvements.
+SkyRats is a Forge 1.8.9 **client-sided mod** designed to enhance the **Hypixel Skyblock** experience with useful features and quality-of-life improvements.
 
 > ⚠️ **Disclaimer**  
 > This mod is **not officially approved or endorsed by Hypixel**, and is **not listed** on their [Allowed Modifications list](https://support.hypixel.net/hc/en-us/articles/6472550754962-Hypixel-Allowed-Modifications).  
@@ -17,10 +17,8 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 
 - **Mining Ability Notification**  
   Alerts the player when their mining ability is ready to be used.
-- **Mining Ability Switch Notification**
+- **Mining Ability Switch Notification**  
   Alerts the player to switch back to Pickobulus after exiting a mineshaft.
-
-*More coming soon...*
 </details>
 
 <details>
@@ -29,20 +27,19 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 - **Mineshaft Tracker**  
   Automatically detects gemstone shafts and tracks their type.  
   The gemstone or Dwarven metal block must be **visible on screen**.
-
-*More coming soon...*
 </details>
 
 <details>
 <summary>Rift</summary>
 
-*More coming soon...*
+- **Split or Steal Tracker**  
+  Tracks Split or Steal cooldown.
 </details>
 
 <details>
 <summary>Other</summary>
 
-*More coming soon...*
+*Coming soon...*
 </details>
 
 
@@ -59,11 +56,12 @@ SkyRats is a **client-side mod** designed to enhance the **Hypixel Skyblock** ex
 
 ## Commands
 
-| Command | Description                                                    |
-|--------|----------------------------------------------------------------|
-| `/sr` | Open the SkyRats settings GUI.                                 |
+| Command      | Description                                                  |
+|--------------|--------------------------------------------------------------|
+| `/sr`        | Open the SkyRats settings GUI.                               |
 | `/sr shafts` | Show all the mineshafts type and amount that you have entered. |
-| `/sr wmi` | Display your current island/location.                          |
+| `/sr gui`    | Opens GUI editor ecreen.
+| `/sr sos`    | Shows time remaining on Split or Steal cooldown.  |
 
 
 
