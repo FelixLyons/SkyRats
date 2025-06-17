@@ -5,15 +5,15 @@ import com.SkyRats.Core.GUI.GuiOpener;
 import com.SkyRats.GUI.EditGUI;
 import com.SkyRats.GUI.HomeGUI;
 
-public class MenuCommand implements CommandExecution {
+public class EditorCommand implements CommandExecution {
     private final EditGUI editGUI;
 
-    public MenuCommand(EditGUI editGUI) {
+    public EditorCommand(EditGUI editGUI) {
         this.editGUI = editGUI;
     }
 
     @Override
     public void execute() {
-        GuiOpener.queueGui(new HomeGUI(editGUI));
+        GuiOpener.queueGui(editGUI);
     }
 }

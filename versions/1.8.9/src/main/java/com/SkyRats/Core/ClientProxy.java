@@ -12,6 +12,7 @@ import com.SkyRats.Core.Features.PlayerLocationChecker;
 import com.SkyRats.Core.GUI.GuiOpener;
 import com.SkyRats.Features.Mining.ShaftDetector;
 import com.SkyRats.Features.Rift.StealOrSplitTracker;
+import com.SkyRats.GUI.EditGUI;
 import com.SkyRats.GUI.HUD.HUDManager;
 import com.SkyRats.GUI.HUD.HUDRenderer;
 import com.SkyRats.GUI.HUD.ShaftDisplay;
@@ -21,8 +22,10 @@ import net.minecraftforge.common.MinecraftForge;
 public class ClientProxy  {
     private AlertMessagePopup alertPopup = new AlertMessagePopup();
     private MineshaftTracker tracker = new MineshaftTracker();
+    private EditGUI editor = new EditGUI();
     private CommandRegisterAll commands = new CommandRegisterAll(
-            tracker
+            tracker,
+            editor
     );
 
     // HUDs Objects

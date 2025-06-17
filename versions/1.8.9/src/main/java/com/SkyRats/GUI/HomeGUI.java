@@ -23,8 +23,10 @@ public class HomeGUI extends GuiScreen {
     private final int panelWidth = leftPanelWidth + rightPanelWidth;
     private final int panelHeight = 320;
     private EditButton editButton;
+    private EditGUI editor;
 
-    public HomeGUI() {
+    public HomeGUI(EditGUI editor) {
+        this.editor = editor;
         FeatureSettings.run();
     }
 
@@ -34,7 +36,7 @@ public class HomeGUI extends GuiScreen {
             @Override
             public void run() {
                 HUDSettings.applyHUDPositions(HUDFILE);
-                GuiOpener.queueGui(new EditGUI());
+                GuiOpener.queueGui(editor);
             }
         });
     }
