@@ -201,53 +201,8 @@ public class HomeGUI extends GuiScreen {
                 toggle.setX(x);
                 toggle.setY(offsetY);
 
-                if(toggle.getLabel().equalsIgnoreCase("Mineshaft Tracker HUD") && toggle.getValue()) {
-                    boolean isTrackerOn = FeatureSettings.isFeatureEnabled("Mining", "Mineshaft Tracker");
-                    if (!isTrackerOn) {
-                        List<Settings> miningToggles = FeatureSettings.getFeatureSettings().get("Mining");
-                        if (miningToggles != null) {
-                            for (Settings miningToggle : miningToggles) {
-                                if (miningToggle.getLabel().equalsIgnoreCase("Mineshaft Tracker")) {
-                                    miningToggle.setValue(true);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } else if(toggle.getLabel().equalsIgnoreCase("Mineshaft Tracker") && !toggle.getValue()) {
-                    List<Settings> hudToggles = FeatureSettings.getFeatureSettings().get("HUD");
-                    if (hudToggles != null) {
-                        for (Settings hudToggle : hudToggles) {
-                            if (hudToggle.getLabel().equalsIgnoreCase("Mineshaft Tracker HUD")) {
-                                hudToggle.setValue(false);
-                                break;
-                            }
-                        }
-                    }
-                } else if(toggle.getLabel().equalsIgnoreCase("Split or Steal HUD") && toggle.getValue()) {
-                    boolean isTrackerOn = FeatureSettings.isFeatureEnabled("Rift", "Split or Steal Tracker");
-                    if (!isTrackerOn) {
-                        List<Settings> riftToggles = FeatureSettings.getFeatureSettings().get("Rift");
-                        if (riftToggles != null) {
-                            for (Settings miningToggle : riftToggles) {
-                                if (miningToggle.getLabel().equalsIgnoreCase("Split or Steal Tracker")) {
-                                    miningToggle.setValue(true);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                } else if(toggle.getLabel().equalsIgnoreCase("Split or Steal Tracker") && !toggle.getValue()) {
-                    List<Settings> hudToggles = FeatureSettings.getFeatureSettings().get("HUD");
-                    if (hudToggles != null) {
-                        for (Settings hudToggle : hudToggles) {
-                            if (hudToggle.getLabel().equalsIgnoreCase("Split or Steal HUD")) {
-                                hudToggle.setValue(false);
-                                break;
-                            }
-                        }
-                    }
-                }
+                syncToggle("HUD", "Mineshaft Tracker HUD", "Mining", "Mineshaft Tracker", toggle);
+                syncToggle("HUD", "Split or Steal HUD", "Rift", "Split or Steal Tracker", toggle);
 
                 // Draw label with blue if ON, dark gray if OFF
                 int labelColor = toggle.getValue() ? 0xFF3F76E4 : 0xFF555555; // blue if on or gray if off
@@ -282,6 +237,43 @@ public class HomeGUI extends GuiScreen {
     public void onGuiClosed() {
         SettingsManager.save(FeatureSettings.getFeatureSettings(), SAVEFILE);
         super.onGuiClosed();
+    }
+
+    // Sync toggles for trackers and their HUDs
+    private void syncToggle(String hudCategory, String hudLabel, String trackerCategory, String trackerLabel, Settings toggledSetting) {
+        boolean isHUD = toggledSetting.getLabel().equalsIgnoreCase(hudLabel);
+        boolean isTracker = toggledSetting.getLabel().equalsIgnoreCase(trackerLabel);
+
+        boolean hudWasOn = FeatureSettings.isFeatureEnabled(hudCategory, hudLabel);
+        boolean trackerWasOn = FeatureSettings.isFeatureEnabled(trackerCategory, trackerLabel);
+
+        if (isHUD && toggledSetting.getValue()) {
+            // HUD turned ON manually → ensure tracker is ON
+            setToggle(trackerCategory, trackerLabel, true);
+        } else if (isTracker && toggledSetting.getValue() && !trackerWasOn) {
+            // Tracker was OFF, now turned ON → if HUD is OFF, turn it ON
+            if (!hudWasOn) {
+                setToggle(hudCategory, hudLabel, true);
+            }
+        } else if (isTracker && !toggledSetting.getValue()) {
+            // Tracker turned OFF → if HUD is ON, turn it OFF
+            if (hudWasOn) {
+                setToggle(hudCategory, hudLabel, false);
+            }
+        }
+    }
+
+    // Set the toggle to true/false
+    private void setToggle(String category, String label, boolean value) {
+        List<Settings> toggles = FeatureSettings.getFeatureSettings().get(category);
+        if (toggles != null) {
+            for (Settings setting : toggles) {
+                if (setting.getLabel().equalsIgnoreCase(label)) {
+                    setting.setValue(value);
+                    break;
+                }
+            }
+        }
     }
 }
 
