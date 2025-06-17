@@ -13,7 +13,7 @@ public class StealOrSplitTracker {
     private boolean msgSent = false;
 
     public static void check(String msg) {
-        if(msg.startsWith("Your opponent earned") && msg.endsWith("!")) {
+        if(msg.startsWith("ROUND 1:") && msg.endsWith("!")) {
             isActive = true;
         }
     }
@@ -21,9 +21,9 @@ public class StealOrSplitTracker {
     public static void checkAlrCD(String msg) {
         if(msg.startsWith("SPLIT! You need to wait")) {
             int totalSec = parseCooldownTime(msg);
-            if(TimerTracker.isCooldownActive("SplitOrSteal")) {
-                TimerTracker.clearCooldown("SplitOrSteal");
-                TimerTracker.startCooldown("SplitOrSteal", totalSec);
+            if(TimerTracker.isCooldownActive("Split_Or_Steal")) {
+                TimerTracker.clearCooldown("Split_Or_Steal");
+                TimerTracker.startCooldown("Split_Or_Steal", totalSec);
             }
             isActive = true;
         }
@@ -63,17 +63,17 @@ public class StealOrSplitTracker {
         if(Minecraft.getMinecraft().thePlayer == null || Minecraft.getMinecraft().theWorld == null) return;
 
         if(isActive) {
-            if(!TimerTracker.isCooldownActive("SplitOrSteal")) {
-                TimerTracker.startCooldown("SplitOrSteal", 7200);
+            if(!TimerTracker.isCooldownActive("Split_Or_Steal")) {
+                TimerTracker.startCooldown("Split_Or_Steal", 7200);
                 msgSent = false;
             }
         } else {
             return;
         }
 
-        if(TimerTracker.getCooldownTimeLeft("SplitOrSteal") == 0) {
+        if(TimerTracker.getCooldownTimeLeft("Split_Or_Steal") == 0) {
             isActive = false;
-            TimerTracker.clearCooldown("SplitOrSteal");
+            TimerTracker.clearCooldown("Split_Or_Steal");
             if(!msgSent) {
                 Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + "" +
                         EnumChatFormatting.RED + "[SR] " + EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +

@@ -32,8 +32,8 @@ public class TimerTracker {
         Map<String, List<TimeData>> loaded = SettingsManager.load(timerTracker, TimeData.class);
         cooldowns.clear();
         if(loaded != null) {
-            if(loaded.containsKey("cooldown")) {
-                for(TimeData time : loaded.get("cooldown")) {
+            if(loaded.containsKey("cooldowns")) {
+                for(TimeData time : loaded.get("cooldowns")) {
                     cooldowns.put(time.name, time);
                 }
             }
