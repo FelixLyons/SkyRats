@@ -47,10 +47,14 @@ public class BaseCommand extends GuiChat {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == Keyboard.KEY_TAB) {
-            handleTabCompletion();
+            if (!handleTabCompletion()) {
+                // Fallback to Minecraft's original autocomplete if no custom matches
+                super.keyTyped(typedChar, keyCode);
+            }
             return;
         }
-        // Reset tab completion on other keys
+
+        // Reset tab completions if any other key is pressed
         tabCompletions.clear();
         completionIndex = -1;
 
@@ -112,12 +116,12 @@ public class BaseCommand extends GuiChat {
     }
 
     // Handles TAB completion logic triggered by TAB key press
-    private void handleTabCompletion() {
+    private boolean handleTabCompletion() {
         String currentText = this.inputField.getText();
 
         // Only proceed if input starts with slash (command)
         if (!currentText.startsWith("/")) {
-            return;
+            return false;
         }
 
         // Remove leading slash and split input by spaces into parts
@@ -130,7 +134,7 @@ public class BaseCommand extends GuiChat {
 
             // If no matches, do nothing
             if (tabCompletions.isEmpty()) {
-                return;
+                return false;
             }
 
             // If multiple matches, show them in chat for user info
@@ -183,6 +187,7 @@ public class BaseCommand extends GuiChat {
         // Set the text in the input field and move text cursor to the end
         this.inputField.setText(newText.trim());
         this.inputField.setCursorPositionEnd();
+        return true;
     }
 
 

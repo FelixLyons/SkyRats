@@ -14,8 +14,14 @@ public class SplitOrStealTime implements CommandExecution {
         int minutes = (totalTime % 3600) / 60;
         int seconds = totalTime % 60;
 
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + "" +
-                EnumChatFormatting.RED + "[SR] " + EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +
-                "Split or Steal: " + hours + "h " + minutes + "m " + seconds + "s"));
+        if(hours == 0 && minutes == 0 && seconds == 0) {
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + "" +
+                    EnumChatFormatting.RED + "[SR] " + EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +
+                    "Split or Steal: " + EnumChatFormatting.GREEN + "Available"));
+        }else {
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + "" +
+                    EnumChatFormatting.RED + "[SR] " + EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +
+                    "Split or Steal: " + hours + "h " + minutes + "m " + seconds + "s"));
+        }
     }
 }

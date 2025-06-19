@@ -70,21 +70,13 @@ public class StealOrSplitTracker {
                 TimerTracker.startCooldown("Split_Or_Steal", 7200);
                 msgSent = false;
             }
-        } else {
-            return;
-        }
-
-        // Reset timer if it reaches 0
-        if(TimerTracker.getCooldownTimeLeft("Split_Or_Steal") == 0) {
+        } else if(!msgSent && TimerTracker.getCooldownTimeLeft("Split_Or_Steal") == 0) {
             isActive = false;
             TimerTracker.clearCooldown("Split_Or_Steal");
-            // Alerts user in chat that Split or Steal is ready to use
-            if(!msgSent) {
-                Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + "" +
-                        EnumChatFormatting.RED + "[SR] " + EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +
-                        "Split or Steal is available!"));
-                msgSent = true;
-            }
+            Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(EnumChatFormatting.BOLD + "" +
+                    EnumChatFormatting.RED + "[SR] " + EnumChatFormatting.RESET + "" + EnumChatFormatting.YELLOW +
+                    "Split or Steal is available!"));
+            msgSent = true;
         }
 
         TimerTracker.save();

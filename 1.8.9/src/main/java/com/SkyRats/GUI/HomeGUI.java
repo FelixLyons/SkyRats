@@ -1,6 +1,5 @@
 package com.SkyRats.GUI;
 
-import com.SkyRats.Core.Features.ColorAnimations;
 import com.SkyRats.Core.GUI.*;
 import com.SkyRats.SkyRats;
 import net.minecraft.client.Minecraft;
@@ -10,221 +9,277 @@ import net.minecraft.util.EnumChatFormatting;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 public class HomeGUI extends GuiScreen {
 
+    // Constants defining panel dimensions and padding
+    private static final int LEFT_PANEL_WIDTH = 150;
+    private static final int RIGHT_PANEL_WIDTH = 430;
+    private static final int PANEL_HEIGHT = 320;
+    private static final int PANEL_WIDTH = LEFT_PANEL_WIDTH + RIGHT_PANEL_WIDTH;
+    private static final int FEATURE_TEXT_SPACING = 15;  // vertical space between feature items in left panel
+    private static final int FEATURE_TEXT_HEIGHT = 12;   // height of feature text in left panel
+    private static final int LEFT_PANEL_PADDING_X = 10;  // horizontal padding for left panel content
+    private static final int LEFT_PANEL_PADDING_Y = 40;  // vertical padding for left panel content
+    private static final int RIGHT_PANEL_PADDING_X = 10; // horizontal padding for right panel content
+    private static final int RIGHT_PANEL_PADDING_Y = 20; // vertical padding for right panel content
+
+    // Files for saving/loading configuration and HUD positions
     private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
     private final File HUDFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
-    private int selectedFeature = 0;
-    private final String[] features = {"Home", "HUD", "Alerts", "Mining", "Rift", "Others"};
-    private final int leftPanelWidth = 150;
-    private final int rightPanelWidth = 430;
-    private final int panelWidth = leftPanelWidth + rightPanelWidth;
-    private final int panelHeight = 320;
-    private EditButton editButton;
-    private EditGUI editor;
 
+    // Index of currently selected feature tab
+    private int selectedFeatureIndex = 0;
+    // Feature tab names displayed in left panel
+    private final String[] features = {"Home", "Alerts", "Mining", "Rift", "Others"};
+
+    private EditButton editButton;    // Button used in Home tab to open HUD editor
+    private final EditGUI EDITOR;     // Reference to the HUD editor GUI
+
+    // Constructor: takes an EditGUI instance and runs feature settings initialization
     public HomeGUI(EditGUI editor) {
-        this.editor = editor;
+        this.EDITOR = editor;
         FeatureSettings.run();
     }
 
     @Override
     public void initGui() {
+        // Initialize the "Edit" button with a click listener that applies HUD positions and opens the editor GUI
         this.editButton = new EditButton("Edit", new Runnable() {
             @Override
             public void run() {
                 HUDSettings.applyHUDPositions(HUDFILE);
-                GuiOpener.queueGui(editor);
+                GuiOpener.queueGui(EDITOR);
             }
         });
+
+        // Initialize all feature dropdowns for the GUI
+        FeatureDropdown.initializeDropdowns();
     }
 
-    // Draws /sr menu
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        /* Chroma Color
-        int chroma = ColorAnimations.getChromaColor(8f, 0f);
-        */
 
-        // Panel sizes
-        int panelX = (width - panelWidth) / 2;
-        int panelY = (height - panelHeight) / 2;
+        // Calculate top-left corner of the main panel to center it on screen
+        int panelX = (width - PANEL_WIDTH) / 2;
+        int panelY = (height - PANEL_HEIGHT) / 2;
 
-        // Draw left panel background
-        drawRect(panelX, panelY, panelX + leftPanelWidth, panelY + panelHeight, 0xCC111111);
-        // Draw right panel background
-        drawRect(panelX + leftPanelWidth, panelY, panelX + panelWidth, panelY + panelHeight, 0xCC111111);
-
-        // Title and creator
-        int startY = panelY;
-        int yPos = startY + 10;
-        drawString(fontRendererObj,
-                EnumChatFormatting.BOLD + "" + EnumChatFormatting.UNDERLINE + "SkyRats",
-                panelX + 10,
-                yPos,
-                0xFF3F76E4);
-        // Making text smaller for creator
-        GlStateManager.pushMatrix();
-        // Scaled down by 10%
-        GlStateManager.scale(0.87F, 0.87F, 1.0F);
-        fontRendererObj.drawString(
-                EnumChatFormatting.BOLD + "By Sunaio & A_Blender_",
-                (int) ((panelX + 10) / 0.87F),
-                (int) ((yPos + 14) / 0.87F),
-                0xFF3F76E4
-        );
-
-        GlStateManager.popMatrix();
-
-        // Draw vertical separator line between panels
-        int lineX = panelX + leftPanelWidth;
-        drawRect(lineX, panelY, lineX + 1, panelY + panelHeight, 0xFF3F76E4);
-
-        // Draw feature texts on left panel
-        startY = panelY + 40;
-        for (int i = 0; i < features.length; i++) {
-            yPos = startY + i * 15; // spacing
-
-            // Check if mouse is hovering over this feature text
-            boolean isHover = mouseX >= panelX + 10
-                    && mouseX <= panelX + leftPanelWidth - 10
-                    && mouseY >= yPos
-                    && mouseY <= yPos + 12;
-
-            // Highlight selected or hovered text
-            if (i == selectedFeature) {
-                // light blue and underlined if selected
-                drawString(fontRendererObj,
-                        EnumChatFormatting.UNDERLINE + features[i],
-                        panelX + 10, yPos,
-                        0xFF3F76E4);
-            } else if (isHover) {
-                // light blue on hover
-                drawString(fontRendererObj,features[i], panelX + 10, yPos, 0xFF3F76E4);
-            } else {
-                // normal color (white)
-                drawString(fontRendererObj, features[i], panelX + 10, yPos, 0xFFFFFF);
-            }
-        }
-
-        // Draw right panel content based on selected feature
-        drawRightPanelContent(panelX + leftPanelWidth + 10, panelY + 20, mouseX, mouseY);
+        // Draw background rectangles for both panels and separator line
+        drawPanelsBackground(panelX, panelY);
+        // Draw feature list on left panel
+        drawLeftPanelFeatures(panelX, panelY, mouseX, mouseY);
+        // Draw feature-specific content on right panel
+        drawRightPanelContent(panelX + LEFT_PANEL_WIDTH + RIGHT_PANEL_PADDING_X, panelY + RIGHT_PANEL_PADDING_Y, mouseX, mouseY);
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
-    //Detects if user clicks on options on the left panel
+    // Draw background rectangles for left and right panels, and the separator line
+    private void drawPanelsBackground(int panelX, int panelY) {
+        drawRect(panelX, panelY, panelX + LEFT_PANEL_WIDTH,
+                panelY + PANEL_HEIGHT, 0xCC111111); // Left panel bg
+        drawRect(panelX + LEFT_PANEL_WIDTH, panelY,
+                panelX + PANEL_WIDTH, panelY + PANEL_HEIGHT, 0xCC111111); // Right panel bg
+        drawRect(panelX + LEFT_PANEL_WIDTH, panelY,
+                panelX + LEFT_PANEL_WIDTH + 1, panelY + PANEL_HEIGHT,
+                0xFF3F76E4); // Blue separator line
+    }
+
+    // Draw the list of feature tabs in the left panel
+    private void drawLeftPanelFeatures(int panelX, int panelY, int mouseX, int mouseY) {
+        int yStart = panelY + LEFT_PANEL_PADDING_Y;
+
+        for (int i = 0; i < features.length; i++) {
+            int yPos = yStart + i * FEATURE_TEXT_SPACING;
+
+            // Check if mouse is hovering over this feature text
+            boolean isHover = mouseX >= panelX + LEFT_PANEL_PADDING_X
+                    && mouseX <= panelX + LEFT_PANEL_WIDTH - LEFT_PANEL_PADDING_X
+                    && mouseY >= yPos
+                    && mouseY <= yPos + FEATURE_TEXT_HEIGHT;
+
+            int color;
+            String text = features[i];
+
+            // Highlight currently selected feature with underline and blue color
+            if (i == selectedFeatureIndex) {
+                text = EnumChatFormatting.UNDERLINE + text;
+                color = 0xFF3F76E4;
+            } else if (isHover) {
+                // Highlight hovered feature with blue color
+                color = 0xFF3F76E4;
+            } else {
+                // Default white color
+                color = 0xFFFFFFFF;
+            }
+
+            // Draw feature text label
+            drawString(fontRendererObj, text, panelX + LEFT_PANEL_PADDING_X, yPos, color);
+        }
+
+        // Draw GUI title and creator info at the top of the left panel
+        drawTitleAndCreator(panelX);
+    }
+
+    // Draw the title "SkyRats" and the authors below it
+    private void drawTitleAndCreator(int panelX) {
+        int yPos = (height - PANEL_HEIGHT) / 2 + 10;
+        drawString(fontRendererObj,
+                EnumChatFormatting.BOLD + "" + EnumChatFormatting.UNDERLINE + "SkyRats",
+                panelX + LEFT_PANEL_PADDING_X,
+                yPos,
+                0xFF3F76E4);
+
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(0.87F, 0.87F, 1.0F);
+        fontRendererObj.drawString(
+                EnumChatFormatting.BOLD + "By Sunaio & A_Blender_",
+                (int) ((panelX + LEFT_PANEL_PADDING_X) / 0.87F),
+                (int) ((yPos + 14) / 0.87F),
+                0xFF3F76E4
+        );
+        GlStateManager.popMatrix();
+    }
+
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        if (mouseButton == 0) {
-            String featureKey = features[selectedFeature];
-            // Click for Edit Button
-            if (featureKey.equals("Home") && editButton != null && editButton.isHovered(mouseX, mouseY)) {
-                editButton.onClick();
-                return;
-            }
-
-            // Check for toggle interaction
-            List<Settings> toggles = FeatureSettings.getFeatureSettings().get(featureKey);
-            if (toggles != null) {
-                for (Settings toggle : toggles) {
-                    if (toggle.isHovered(mouseX, mouseY)) {
-                        toggle.toggle();
-                        Minecraft.getMinecraft().thePlayer.playSound("gui.button.press", 0.8F, 1.0F);
-                        return;
-                    }
-                }
-            }
-
-            // Check for feature sidebar selection
-            int panelX = (width - panelWidth) / 2;
-            int panelY = (height - panelHeight) / 2;
-            int startY = panelY + 40;
-            for (int i = 0; i < features.length; i++) {
-                int yPos = startY + i * 15; // spacing (change this if you changed spacing for left panel)
-                if (mouseX >= panelX + 10 && mouseX <= panelX + leftPanelWidth - 10
-                        && mouseY >= yPos && mouseY <= yPos + 12) {
-                    selectedFeature = i;
-                    break;
-                }
-            }
+        // Only handle left click here
+        if (mouseButton != 0) {
+            super.mouseClicked(mouseX, mouseY, mouseButton);
+            return;
         }
+
+        // Check if edit button is hovered
+        if ("Home".equals(features[selectedFeatureIndex]) && editButton.isHovered(mouseX, mouseY)) {
+            editButton.onClick();
+            return;
+        }
+
+        int panelX = (width - PANEL_WIDTH) / 2;
+        int panelY = (height - PANEL_HEIGHT) / 2;
+
+        // Check if the click was on the left panel feature list
+        if (handleLeftPanelClick(mouseX, mouseY, panelX, panelY)) return;
+        // Check if the click was on the right panel content (toggles, dropdowns)
+        if (handleRightPanelClick(mouseX, mouseY)) return;
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
-    //Right panel of GUI where all settings for selected feature is displayed.
+    // Handle clicks on the left panel feature list; change selected feature if clicked
+    private boolean handleLeftPanelClick(int mouseX, int mouseY, int panelX, int panelY) {
+        int startY = panelY + LEFT_PANEL_PADDING_Y;
+
+        for (int i = 0; i < features.length; i++) {
+            int yPos = startY + i * FEATURE_TEXT_SPACING;
+            if (mouseX >= panelX + LEFT_PANEL_PADDING_X && mouseX <= panelX + LEFT_PANEL_WIDTH - LEFT_PANEL_PADDING_X
+                    && mouseY >= yPos && mouseY <= yPos + FEATURE_TEXT_HEIGHT) {
+                selectedFeatureIndex = i;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Handle clicks on the right panel elements like dropdowns and toggles
+    private boolean handleRightPanelClick(int mouseX, int mouseY) {
+        String currentFeature = features[selectedFeatureIndex];
+        Map<String, List<FeatureDropdown>> dropdownMap = FeatureDropdown.getDropdownsByFeature();
+        List<FeatureDropdown> dropdowns = dropdownMap.get(currentFeature);
+        if (dropdowns != null) {
+            int panelX = (width - PANEL_WIDTH) / 2 + LEFT_PANEL_WIDTH + RIGHT_PANEL_PADDING_X;
+            int offsetY = (height - PANEL_HEIGHT) / 2 + RIGHT_PANEL_PADDING_Y + 20;
+
+            // Check each dropdown if it was clicked
+            for (FeatureDropdown dropdown : dropdowns) {
+                if (dropdown.mouseClicked(mouseX, mouseY, panelX, offsetY)) {
+                    return true;
+                }
+                offsetY += dropdown.getHeight(fontRendererObj) + 10;
+            }
+        }
+
+        // Check toggles if clicked and toggle them
+        List<Settings> toggles = FeatureSettings.getFeatureSettings().get(features[selectedFeatureIndex]);
+        if (toggles != null) {
+            for (Settings toggle : toggles) {
+                if (toggle.isHovered(mouseX, mouseY)) {
+                    toggle.toggle();
+                    Minecraft.getMinecraft().thePlayer.playSound("gui.button.press", 0.8F, 1.0F);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Draw content for the right panel based on the selected feature tab
     private void drawRightPanelContent(int x, int y, int mouseX, int mouseY) {
-        //int chroma = ColorAnimations.getChromaColor(8f, 0f);
-        drawString(fontRendererObj, EnumChatFormatting.UNDERLINE + "" + EnumChatFormatting.BOLD + features[selectedFeature],
-                x,
-                y,
-                0xFF3F76E4);
+        String currentFeature = features[selectedFeatureIndex];
 
-        int offsetY = y + 20; // spacing
+        // Draw the feature tab title at the top
+        drawString(fontRendererObj, EnumChatFormatting.UNDERLINE + ""
+                + EnumChatFormatting.BOLD + currentFeature, x, y, 0xFF3F76E4);
 
-        // Edit GUI Location button
-        if (features[selectedFeature].equals("Home")) {
-            // Draw version text
-            fontRendererObj.drawString(
-                    "SkyRats v" + SkyRats.VERSION,
-                    x,
-                    offsetY,
-                    0xFF3F76E4
-            );
+        int offsetY = y + 20;
 
-            offsetY += 18; // spacing
-
-            int rowHeight = 14;
-            int rowY = offsetY;
-
-            // Center the label vertically within the row
-            int textY = rowY + (rowHeight - fontRendererObj.FONT_HEIGHT) / 2;
-            fontRendererObj.drawString("Edit HUD Location", x, textY, 0xFF3F76E4);
-
-            // Align button on same row
-            editButton.setPosition(x + 350, rowY);
-            editButton.draw(mc, mouseX, mouseY);
-
+        // If "Home" feature selected, draw Home specific content
+        if ("Home".equals(currentFeature)) {
+            drawHomePanelContent(x, offsetY, mouseX, mouseY);
             return;
         }
 
-        List<Settings> toggles = FeatureSettings.getFeatureSettings().get(features[selectedFeature]);
-        if ((toggles == null || toggles.isEmpty()) && !features[selectedFeature].equals("Home")) {
+        // Get toggles and dropdowns for the current feature
+        List<Settings> toggles = FeatureSettings.getFeatureSettings().get(currentFeature);
+        Map<String, List<FeatureDropdown>> dropdownList = FeatureDropdown.getDropdownsByFeature();
+        List<FeatureDropdown> dropdowns = dropdownList.get(currentFeature);
+
+        // If no toggles available, show "WIP"
+        if (toggles == null || toggles.isEmpty()) {
             drawString(fontRendererObj, "WIP", x, offsetY, 0xAAAAAA);
             return;
         }
 
-        if(toggles != null) {
+        // Keep track of toggles already drawn inside dropdowns to avoid duplicates
+        Set<Settings> drawnInDropdown = new HashSet<Settings>();
+        if (dropdowns != null) {
+            for (FeatureDropdown dropdown : dropdowns) {
+                dropdown.draw(mc, fontRendererObj, x, offsetY, mouseX, mouseY);
+                drawnInDropdown.addAll(dropdown.getToggles());
+                offsetY += dropdown.getHeight(fontRendererObj) + 10;
+            }
+        }
+
+        // Draw toggles not contained inside dropdowns individually
+        if (toggles != null) {
             for (Settings toggle : toggles) {
-                toggle.setX(x);
+                if (drawnInDropdown.contains(toggle)) continue;
+
+                // Set toggle position further right for better alignment
+                int toggleX = x + 20;
+                toggle.setX(toggleX);
                 toggle.setY(offsetY);
 
-                syncToggle("HUD", "Mineshaft Tracker HUD", "Mining", "Mineshaft Tracker", toggle);
-                syncToggle("HUD", "Split or Steal HUD", "Rift", "Split or Steal Tracker", toggle);
-
-                // Draw label with blue if ON, dark gray if OFF
-                int labelColor = toggle.getValue() ? 0xFF3F76E4 : 0xFF555555; // blue if on or gray if off
+                // Toggle label color depends on toggle state
+                int labelColor = toggle.getValue() ? 0xFF3F76E4 : 0xFF555555;
                 fontRendererObj.drawString(toggle.getLabel(), x, offsetY + 4, labelColor);
                 toggle.draw(mc, mouseX, mouseY);
 
-                String desc = toggle.getDescription();
                 offsetY += toggle.getHeight();
 
+                // Draw optional description in smaller scaled font below toggle label
+                String desc = toggle.getDescription();
                 if (desc != null && !desc.isEmpty()) {
-                    // Scaling down text size
                     GlStateManager.pushMatrix();
                     GlStateManager.scale(0.77F, 0.77F, 1.0F);
-                    int descColor = toggle.getValue() ? 0xFFFFFFFF : 0xFF555555;  // white if ON, gray if OFF
+                    int descColor = toggle.getValue() ? 0xFFFFFFFF : 0xFF555555;
                     drawString(fontRendererObj,
                             desc,
                             (int) ((x + 4) / 0.77F),
                             (int) ((offsetY + 2) / 0.77F),
-                            descColor
-                    );
+                            descColor);
                     GlStateManager.popMatrix();
                     offsetY += 14;
                 } else {
@@ -234,49 +289,26 @@ public class HomeGUI extends GuiScreen {
         }
     }
 
-    //Save settings on gui close
+    // Draw content specific to the "Home" tab
+    private void drawHomePanelContent(int x, int offsetY, int mouseX, int mouseY) {
+        // Display version string
+        fontRendererObj.drawString("SkyRats v" + SkyRats.VERSION, x, offsetY, 0xFF3F76E4);
+        offsetY += 18;
+
+        int rowHeight = 14;
+        int rowY = offsetY;
+        int textY = rowY + (rowHeight - fontRendererObj.FONT_HEIGHT) / 2;
+        fontRendererObj.drawString("Edit HUD Location", x, textY, 0xFF3F76E4);
+
+        // Position and draw the "Edit" button for HUD editing
+        editButton.setPosition(x + 350, rowY);
+        editButton.draw(mc, mouseX, mouseY);
+    }
+
     @Override
     public void onGuiClosed() {
+        // Save feature settings to config file on GUI close
         SettingsManager.save(FeatureSettings.getFeatureSettings(), SAVEFILE);
         super.onGuiClosed();
     }
-
-    // Sync toggles for trackers and their HUDs
-    private void syncToggle(String hudCategory, String hudLabel, String trackerCategory, String trackerLabel, Settings toggledSetting) {
-        boolean isHUD = toggledSetting.getLabel().equalsIgnoreCase(hudLabel);
-        boolean isTracker = toggledSetting.getLabel().equalsIgnoreCase(trackerLabel);
-
-        boolean hudWasOn = FeatureSettings.isFeatureEnabled(hudCategory, hudLabel);
-        boolean trackerWasOn = FeatureSettings.isFeatureEnabled(trackerCategory, trackerLabel);
-
-        if (isHUD && toggledSetting.getValue()) {
-            // HUD turned ON manually → ensure tracker is ON
-            setToggle(trackerCategory, trackerLabel, true);
-        } else if (isTracker && toggledSetting.getValue() && !trackerWasOn) {
-            // Tracker was OFF, now turned ON → if HUD is OFF, turn it ON
-            if (!hudWasOn) {
-                setToggle(hudCategory, hudLabel, true);
-            }
-        } else if (isTracker && !toggledSetting.getValue()) {
-            // Tracker turned OFF → if HUD is ON, turn it OFF
-            if (hudWasOn) {
-                setToggle(hudCategory, hudLabel, false);
-            }
-        }
-    }
-
-    // Set the toggle to true/false
-    private void setToggle(String category, String label, boolean value) {
-        List<Settings> toggles = FeatureSettings.getFeatureSettings().get(category);
-        if (toggles != null) {
-            for (Settings setting : toggles) {
-                if (setting.getLabel().equalsIgnoreCase(label)) {
-                    setting.setValue(value);
-                    break;
-                }
-            }
-        }
-    }
 }
-
-
