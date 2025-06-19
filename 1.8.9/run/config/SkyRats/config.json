@@ -1,0 +1,34 @@
+{
+  "Mining": [
+    {
+      "label": "Mineshaft Tracker",
+      "value": false
+    }
+  ],
+  "Rift": [
+    {
+      "label": "Split or Steal Tracker",
+      "value": false
+    }
+  ],
+  "HUD": [
+    {
+      "label": "Mineshaft Tracker HUD",
+      "value": false
+    },
+    {
+      "label": "Split or Steal HUD",
+      "value": false
+    }
+  ],
+  "Alerts": [
+    {
+      "label": "Mining Ability Cooldown Notification",
+      "value": false
+    },
+    {
+      "label": "Reminder to Switch Ability Notification",
+      "value": false
+    }
+  ]
+}

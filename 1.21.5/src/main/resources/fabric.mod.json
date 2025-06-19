@@ -1,0 +1,44 @@
+{
+	"schemaVersion": 1,
+	"id": "skyrats",
+	"version": "${version}",
+	"name": "SkyRats",
+	"description": "A client-side QOL mod made for Hypixel Skyblock.",
+	"authors": [
+		"Sunaio, A_Blender_"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FelixLyons/SkyRats"
+	},
+	"license": "MIT",
+	"icon": "assets/skyrats/SkyRats Mod Icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.skyrats.SkyRats"
+		],
+		"client": [
+			"com.skyrats.SkyRatsClient"
+		],
+		"fabric-datagen": [
+			"com.skyrats.SkyRatsDataGenerator"
+		]
+	},
+	"mixins": [
+		"skyrats.mixins.json",
+		{
+			"config": "skyrats.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.5",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

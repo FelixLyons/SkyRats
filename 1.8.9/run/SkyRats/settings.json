@@ -1,0 +1,18 @@
+{
+  "Mining": [
+    {
+      "label": "Mineshaft Tracker",
+      "value": false
+    }
+  ],
+  "Alerts": [
+    {
+      "label": "Mining Ability Cooldown Notification",
+      "value": true
+    },
+    {
+      "label": "Reminder to Switch Ability Notification",
+      "value": false
+    }
+  ]
+}

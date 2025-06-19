@@ -1,4 +1,0 @@
-allprojects {
-    group = 'com.skyrats'
-    version = '1.0.3'
-}
