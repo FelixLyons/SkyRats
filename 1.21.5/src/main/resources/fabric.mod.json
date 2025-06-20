@@ -1,8 +1,8 @@
 {
 	"schemaVersion": 1,
-	"id": "skyrats",
+	"id": "zephyr",
 	"version": "1.0.4",
-	"name": "SkyRats",
+	"name": "Zephyr",
 	"description": "A client-side QOL mod made for Hypixel Skyblock.",
 	"authors": [
 		"Sunaio, A_Blender_"
@@ -16,20 +16,20 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.skyrats.SkyRats"
+			"com.zephyr.Zephyr"
 		],
 		"client": [
-			"com.skyrats.SkyRatsClient",
-			"com.skyrats.Backend.Commands.CommandRunner"
+			"com.zephyr.ZephyrClient",
+			"com.zephyr.Backend.Commands.CommandRunner"
 		],
 		"fabric-datagen": [
-			"com.skyrats.SkyRatsDataGenerator"
+			"com.zephyr.ZephyrDataGenerator"
 		]
 	},
 	"mixins": [
-		"skyrats.mixins.json",
+		"zephyr.mixins.json",
 		{
-			"config": "skyrats.client.mixins.json",
+			"config": "zephyr.client.mixins.json",
 			"environment": "client"
 		}
 	],

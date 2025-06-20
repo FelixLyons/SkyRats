@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "com.zephyr.mixin.client",
+	"compatibilityLevel": "JAVA_21",
+	"client": [
+      "GlassPaneHitboxMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
