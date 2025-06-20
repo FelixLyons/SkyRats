@@ -12,7 +12,7 @@
 		"sources": "https://github.com/FelixLyons/SkyRats"
 	},
 	"license": "MIT",
-	"icon": "assets/skyrats/SkyRats Mod Icon.png",
+	"icon": "assets/zepthyr/SkyRats Mod Icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
