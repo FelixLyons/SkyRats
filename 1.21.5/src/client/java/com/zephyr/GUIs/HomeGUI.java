@@ -42,8 +42,8 @@ public class HomeGUI extends Screen {
         super(Text.of("SR Menu"));
         Features.run();
         if(MinecraftClient.getInstance() != null) {
-            SAVEFILE = new File(MinecraftClient.getInstance().runDirectory, "config/SkyRats/1.21.5/config.json");;
-            HUDFILE = new File(MinecraftClient.getInstance().runDirectory, "config/SkyRats/1.21.5/hud_config.json");
+            SAVEFILE = new File(MinecraftClient.getInstance().runDirectory, "config/Zephyr/1.21.5/config.json");;
+            HUDFILE = new File(MinecraftClient.getInstance().runDirectory, "config/Zephyr/1.21.5/hud_config.json");
         }
     }
 

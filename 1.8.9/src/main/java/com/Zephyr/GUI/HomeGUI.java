@@ -26,8 +26,8 @@ public class HomeGUI extends GuiScreen {
     private static final int RIGHT_PANEL_PADDING_Y = 20; // vertical padding for right panel content
 
     // Files for saving/loading configuration and HUD positions
-    private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
-    private final File HUDFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
+    private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/Zephyr/1.8.9/config.json");
+    private final File HUDFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/Zephyr/1.8.9/hud_config.json");
 
     // Index of currently selected feature tab
     private int selectedFeatureIndex = 0;

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TimerTracker {
-    private static final File timerTracker = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/time.json");
+    private static final File timerTracker = new File(Minecraft.getMinecraft().mcDataDir, "config/Zephyr/1.8.9/time.json");
     private static final Map<String, TimeData> cooldowns = new HashMap<String, TimeData>();
 
     // Data class representing one cooldown

@@ -13,7 +13,7 @@ public class Features {
 
     public static void run() {
         if(MinecraftClient.getInstance() != null) {
-            SETTINGS_FILE = new File(MinecraftClient.getInstance().runDirectory, "config/SkyRats/1.21.5/config.json");
+            SETTINGS_FILE = new File(MinecraftClient.getInstance().runDirectory, "config/Zephyr/1.21.5/config.json");
         }
         // Load previously saved settings into memory
         Map<String, List<FeaturesToggle>> loaded = SavingManager.load(SETTINGS_FILE, FeaturesToggle.class);

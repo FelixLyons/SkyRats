@@ -12,7 +12,7 @@ import java.util.*;
 
 // Edit GUI screen
 public class EditGUI extends GuiScreen {
-    private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
+    private final File SAVEFILE = new File(Minecraft.getMinecraft().mcDataDir, "config/Zephyr/1.8.9/hud_config.json");
 
     // Draw the GUI screen
     @Override
@@ -97,7 +97,7 @@ public class EditGUI extends GuiScreen {
                                 if(setting.getLabel().equalsIgnoreCase(label)) {
                                     setting.setValue(false); // disables the feature
                                     // Saving disabled feature
-                                    File configFile = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
+                                    File configFile = new File(Minecraft.getMinecraft().mcDataDir, "config/Zephyr/1.8.9/config.json");
                                     SettingsManager.save(FeatureSettings.getFeatureSettings(), configFile);
                                     return;
                                 }

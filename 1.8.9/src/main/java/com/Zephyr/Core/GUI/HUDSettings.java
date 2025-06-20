@@ -77,7 +77,7 @@ public class HUDSettings {
 
     // Loads HUD positions from the default save file and applies them.
     public static void load() {
-        File saveFile = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/hud_config.json");
+        File saveFile = new File(Minecraft.getMinecraft().mcDataDir, "config/Zephyr/1.8.9/hud_config.json");
         applyHUDPositions(saveFile);
     }
 }

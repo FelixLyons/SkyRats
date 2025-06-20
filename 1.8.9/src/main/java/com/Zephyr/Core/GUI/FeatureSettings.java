@@ -6,7 +6,7 @@ import java.io.File;
 import java.util.*;
 
 public class FeatureSettings {
-    private static final File SETTINGS_FILE = new File(Minecraft.getMinecraft().mcDataDir, "config/SkyRats/config.json");
+    private static final File SETTINGS_FILE = new File(Minecraft.getMinecraft().mcDataDir, "config/Zephyr/1.8.9/config.json");
 
     private static final Map<String, List<Settings>> featureSettings = new HashMap<String, List<Settings>>();
 
