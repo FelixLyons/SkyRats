@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"id": "skyrats",
-	"version": "${version}",
+	"version": "1.0.4",
 	"name": "SkyRats",
 	"description": "A client-side QOL mod made for Hypixel Skyblock.",
 	"authors": [
@@ -19,7 +19,8 @@
 			"com.skyrats.SkyRats"
 		],
 		"client": [
-			"com.skyrats.SkyRatsClient"
+			"com.skyrats.SkyRatsClient",
+			"com.skyrats.Backend.Commands.CommandRunner"
 		],
 		"fabric-datagen": [
 			"com.skyrats.SkyRatsDataGenerator"
