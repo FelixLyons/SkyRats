@@ -11,6 +11,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 
 import java.io.File;
 import java.util.List;
@@ -210,7 +211,7 @@ public class HomeGUI extends Screen {
     // Draw content specific to the "Home" tab
     private void drawHomePanelContent(DrawContext context, int x, int offsetY, int mouseX, int mouseY) {
         // Display version string
-        context.drawTextWithShadow(textRenderer,"SkyRats v" + Zephyr.MOD_VERSION, x, offsetY, 0xFF3F76E4);
+        context.drawTextWithShadow(textRenderer,"Zephyr v" + Zephyr.MOD_VERSION, x, offsetY, 0xFF3F76E4);
         offsetY += 18;
 
         int rowHeight = 14;
@@ -227,7 +228,7 @@ public class HomeGUI extends Screen {
     private void drawTitleAndCreator(DrawContext context, int panelX) {
         int yPos = (height - PANEL_HEIGHT) / 2 + 10;
         // Compose the title text with bold + underline formatting
-        Text title = Text.literal("SkyRats").formatted(Formatting.BOLD, Formatting.UNDERLINE);
+        Text title = Text.literal("Zephyr").formatted(Formatting.BOLD, Formatting.UNDERLINE);
         context.drawTextWithShadow(textRenderer, title, panelX + LEFT_PANEL_PADDING_X, yPos, 0xFF3F76E4);
 
         // Compose the author text with bold formatting
