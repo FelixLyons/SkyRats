@@ -127,7 +127,7 @@ public class HomeGUI extends GuiScreen {
     private void drawTitleAndCreator(int panelX) {
         int yPos = (height - PANEL_HEIGHT) / 2 + 10;
         drawString(fontRendererObj,
-                EnumChatFormatting.BOLD + "" + EnumChatFormatting.UNDERLINE + "SkyRats",
+                EnumChatFormatting.BOLD + "" + EnumChatFormatting.UNDERLINE + "Zephyr",
                 panelX + LEFT_PANEL_PADDING_X,
                 yPos,
                 0xFF3F76E4);
@@ -292,7 +292,7 @@ public class HomeGUI extends GuiScreen {
     // Draw content specific to the "Home" tab
     private void drawHomePanelContent(int x, int offsetY, int mouseX, int mouseY) {
         // Display version string
-        fontRendererObj.drawString("SkyRats v" + Zephyr.VERSION, x, offsetY, 0xFF3F76E4);
+        fontRendererObj.drawString("Zephyr v" + Zephyr.VERSION, x, offsetY, 0xFF3F76E4);
         offsetY += 18;
 
         int rowHeight = 14;
