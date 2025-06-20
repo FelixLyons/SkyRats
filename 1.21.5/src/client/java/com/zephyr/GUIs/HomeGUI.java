@@ -39,7 +39,7 @@ public class HomeGUI extends Screen {
     private final String[] features = {"Home", "Alerts", "Mining", "Rift", "Others"};
 
     public HomeGUI() {
-        super(Text.of("SR Menu"));
+        super(Text.of("Zephyr Menu"));
         Features.run();
         if(MinecraftClient.getInstance() != null) {
             SAVEFILE = new File(MinecraftClient.getInstance().runDirectory, "config/Zephyr/1.21.5/config.json");;
